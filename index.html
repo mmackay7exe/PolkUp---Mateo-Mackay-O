@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <title>PolkUp</title>
+</head>
+<body>
+
+  <!-- ==============================
+       SECCIÓN 1: HERO
+  ============================== -->
+  <section class="hero fade-in" id="hero">
+
+    <!-- Punto negro decorativo superior izquierdo -->
+    <div class="hero__dot"></div>
+
+    <!-- Título principal -->
+    <h1 class="hero__title">PolkUp</h1>
+
+    <!-- Línea vertical decorativa + círculo gris de fondo -->
+    <div class="hero__line-vertical"></div>
+    <div class="hero__line-horizontal"></div>
+    <div class="hero__shadow-ellipse"></div>
+
+    <!-- Texto izquierdo -->
+    <div class="hero__text-block">
+      <p class="hero__subtitle">Juego de ascenso, giro y transformación espacial</p>
+      <p class="hero__description">
+        Es un juego basado en niveles, un eje y el movimiento. Cada decisión del
+        jugador transforma el espacio, modifica su perspectiva y redefine el
+        recorrido hacia la cima. Con cada paso siendo uno hacia lo desconocido, lo nuevo.
+      </p>
+    </div>
+
+    <!-- Animación de rotación (GIF de representación del tablero) 
+    <img class="hero__rotation" src="assets/animacionrotacion0.svg" alt="Animación rotación tablero">-->
+
+    <!-- Círculos de colores flotantes 
+    <div class="hero__circles" aria-hidden="true">
+      <div class="circle circle--blue circle--md" style="top:23.41%;left:58.2%"></div>
+      <div class="circle circle--red circle--lg" style="top:51.29%;left:7.19%"></div>
+      <div class="circle circle--outline circle--lg2" style="top:49.77%;left:5.66%"></div>
+      <div class="circle circle--green circle--xs" style="top:34.9%;left:76.45%"></div>
+      <div class="circle circle--blue circle--sm" style="top:57.81%;left:90.06%"></div>
+      <div class="circle circle--blue circle--md2" style="top:28.68%;left:20.95%"></div>
+      <div class="circle circle--outline circle--md3" style="top:27.16%;left:19.42%"></div>
+      <div class="circle circle--red circle--md4" style="top:2.46%;left:55.5%"></div>
+      <div class="circle circle--yellow circle--md5" style="top:45.83%;left:62.54%"></div>
+      <div class="circle circle--green circle--lg2" style="top:5.46%;left:26.15%"></div>
+      <div class="circle circle--green circle--sm2" style="top:75.57%;left:65.14%"></div>
+      <div class="circle circle--outline circle--sm3" style="top:74.05%;left:63.61%"></div>
+      <div class="circle circle--yellow circle--xs2" style="top:9.38%;left:78.36%"></div>
+      <div class="circle circle--outline circle--xs3" style="top:8.3%;left:76.49%"></div>
+      <div class="circle circle--green circle--xxs" style="top:76.48%;left:0%"></div>
+      <div class="circle circle--blue circle--md6" style="top:77.54%;left:21.71%"></div>
+      <div class="circle circle--yellow circle--xs4" style="top:35.81%;left:5.66%"></div>
+      <div class="circle circle--red circle--md7" style="top:33.69%;left:87.46%"></div>
+      <div class="circle circle--yellow circle--md8" style="top:87.56%;left:2.45%"></div>
+      <img class="circle circle--outline-svg" src="assets/ellipse-210.svg" style="top:2.06%;left:15.21%" alt="">
+    </div>
+
+  </section> -->
+
+  <!-- Separador horizontal -->
+  <hr class="divider">
+
+  <!-- ==============================
+       SECCIÓN 2: FRASE + TABLERO
+  ============================== -->
+  <section class="tablero" id="tablero">
+
+    <div class="tablero__frase fade-in">
+      <div class="tablero__frase-izq">
+        <span>no hay horizonte</span>
+        <span>sin el rigor</span>
+      </div>
+      <div class="tablero__frase-der">
+        <span>extenso</span>
+        <span>del ascenso</span>
+      </div>
+    </div>
+
+    <!-- Imagen del tablero horizontal (3 capas superpuestas) -->
+    <div class="tablero__imagen-wrap fade-in delay-2" data-parallax="0.04">
+      <img class="tablero__img tablero__img--1" src="assets/dibujo-horizontal-1-01-10.png" alt="Tablero PolkUp capa 1">
+      <img class="tablero__img tablero__img--2" src="assets/dibujo-horizontal-2-01-10.png" alt="Tablero PolkUp capa 2">
+      <img class="tablero__img tablero__img--3" src="assets/dibujo-horizontal-3-01-10.png" alt="Tablero PolkUp capa 3">
+    </div>
+    </div>
+
+    <!-- Leyenda inferior del tablero -->
+    <div class="tablero__leyenda fade-in delay-3">
+      <span class="tablero__leyenda-texto">EL TABLERO<br>CAMBIA</span>
+      <img class="tablero__leyenda-icono" src="assets/animacionrotacion0.svg" alt="Ícono tablero">
+      <span class="tablero__leyenda-texto tablero__leyenda-texto--right">TÚ DECIDES<br>EL CAMINO</span>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ==============================
+       SECCIÓN 3: MECÁNICAS DEL JUEGO
+  ============================== -->
+  <section class="mecanicas fade-in" id="mecanicas">
+
+    <!-- EJE -->
+    <div class="mecanica" id="mecanica-eje">
+      <div class="mecanica__imagen-wrap">
+        <img class="mecanica__imagen" src="assets/imageneje-10.png" alt="Imagen Eje">
+      </div>
+      <h3 class="mecanica__titulo">EJE</h3>
+      <p class="mecanica__texto">
+        Todo gira en torno a un centro.
+        El eje organiza el espacio y da sentido al movimiento
+      </p>
+    </div>
+
+    <div class="mecanica__separador"></div>
+
+    <!-- GIRO -->
+    <div class="mecanica" id="mecanica-giro">
+      <div class="mecanica__imagen-wrap">
+        <img class="mecanica__imagen" src="assets/imagen-giro-10.png" alt="Imagen Giro">
+      </div>
+      <h3 class="mecanica__titulo">GIRO</h3>
+      <p class="mecanica__texto">
+        Al girar, el jugador transforma su entorno y descubre nuevas posibilidades.
+      </p>
+    </div>
+
+    <div class="mecanica__separador"></div>
+
+    <!-- NIVELES -->
+    <div class="mecanica" id="mecanica-niveles">
+      <div class="mecanica__imagen-wrap">
+        <img class="mecanica__imagen mecanica__imagen--static" src="assets/imagen-niveles-10.png" alt="Imagen Niveles">
+        <img class="mecanica__imagen mecanica__imagen--hover" src="assets/animacion_niveles.gif" alt="Imagen Niveles animada">
+      </div>
+      <h3 class="mecanica__titulo">NIVELES</h3>
+      <p class="mecanica__texto">
+        Cada nivel es un desafío. Ascender implica adaptarse y elegir el próximo paso
+      </p>
+    </div>
+
+    <div class="mecanica__separador"></div>
+
+    <!-- DECISIÓN -->
+    <div class="mecanica" id="mecanica-decision">
+      <div class="mecanica__imagen-wrap">
+        <img class="mecanica__imagen" src="assets/imagen-decision-10.png" alt="Imagen Decisión">
+      </div>
+      <h3 class="mecanica__titulo">DECISIÓN</h3>
+      <p class="mecanica__texto">
+        No existe un único camino. Cada decisión cambia el recorrido y redefine el horizonte
+      </p>
+    </div>
+
+    <div class="mecanica__separador"></div>
+
+    <!-- META -->
+    <div class="mecanica" id="mecanica-meta">
+      <div class="mecanica__imagen-wrap">
+        <img class="mecanica__imagen" src="assets/imagen-meta-10.png" alt="Imagen Meta">
+      </div>
+      <h3 class="mecanica__titulo">META</h3>
+      <p class="mecanica__texto">
+        El objetivo está arriba, pero el camino se construye en cada movimiento.
+      </p>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ==============================
+       SECCIÓN 4: ESCALADOR + CTA
+  ============================== -->
+  <section class="escalador fade-in" id="escalador">
+
+    <!-- Imágenes del escalador (izquierda) -->
+    <div class="escalador__dibujo">
+      <img class="escalador__img escalador__img--edificio" src="assets/dbe-1-10.png" alt="Edificio">
+      <img class="escalador__img escalador__img--figura" src="assets/dbe-2-10.png" alt="Escalador">
+    </div>
+
+    <!-- Texto y CTA (derecha) -->
+    <div class="escalador__contenido">
+      <h2 class="escalador__titulo">
+        TODO ASCENSO<br>
+        DEPENDE DE UN<br>
+        PUNTO DE<br>
+        APOYO
+      </h2>
+
+      <!-- Botón CTA -->
+      <div class="escalador__cta">
+        <button class="cta-btn" id="cta-comenzar" aria-label="Comenzar experiencia">
+          <span class="cta-btn__circulo-outer">
+            <span class="cta-btn__circulo-inner"></span>
+            <span class="cta-btn__cuadrado"></span>
+            <span class="cta-btn__linea"></span>
+          </span>
+          <span class="cta-btn__texto">comenzar<br>experiencia</span>
+        </button>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="divider divider--footer">
+
+  <script src="script.js"></script>
+</body>
+</html>
