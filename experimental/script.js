@@ -521,10 +521,17 @@ window.addEventListener('click', (e) => {
                 
                 // --- SELECCIÓN DEL EVENTO ---
                 let eventType = 'normal';
-                if (currentLevel >= 0) {
+                
+                // Aseguramos que ya empezó a subir y que el nivel de destino no sea la cumbre final
+                if (currentLevel >= 0 && (currentLevel + 1) < (levels.length - 1)) {
                     const roll = Math.random();
-                    if (roll < 0.20) eventType = 'eclipse'; // 20%
-                    else if (roll < 0.40) eventType = 'tension'; // 20%
+                    
+                    // Probabilidades equitativas (20% para cada uno, 40% total de que ocurra algún evento)
+                    if (roll < 0.20) {
+                        eventType = 'eclipse'; 
+                    } else if (roll < 0.40) {
+                        eventType = 'tension'; 
+                    }
                 }
                 
                 avanzarNivel(clickedMesh, intersects[0].point, eventType);

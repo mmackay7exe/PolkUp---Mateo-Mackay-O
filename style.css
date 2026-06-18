@@ -1022,3 +1022,29 @@ img {
   text-transform: uppercase;
 }
 
+/* ── Botón "Iniciar el ascenso" en el hero (esquina inferior derecha) ── */
+.hero__ascenso-btn {
+  position: absolute;
+  bottom: 50px;
+  right: 0px;
+  display: inline-block;
+  padding: 10px 18px;
+  border: 1.5px solid #000000;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  line-height: 1;
+  white-space: nowrap;
+  z-index: 10;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.hero__ascenso-btn:hover {
+  background: #000000;
+  color: #fcfcfb;
+}
