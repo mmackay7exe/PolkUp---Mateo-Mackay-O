@@ -1,0 +1,1050 @@
+/* ============================================================
+   POLKUP — style.css
+   Fuente: Manrope (Google Fonts)
+   Diseño base: 1440px de ancho
+   ============================================================ */
+
+/* ── Reset & base ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  text-decoration: none;
+  background: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  background: #fcfcfb;
+  color: #000000;
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px; /* Evita que el menú tape el título al scrollear */
+}
+
+body {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+body.intro-activa {
+  overflow: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* ── Separador horizontal ─────────────────────────────────── */
+.divider {
+  display: block;
+  width: calc(100% - 64px);
+  margin: 0 auto;
+  border: none;
+  border-top: 1px solid #000000;
+}
+
+.divider--footer {
+  margin-top: 0;
+}
+
+/* ============================================================
+   HEADER (NAV FIJO Y SÓLIDO)
+   ============================================================ */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px; /* Definimos una altura fija para la barra */
+  padding: 0 50px; /* Padding lateral */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000; /* Asegura que esté siempre por encima de todo */
+  background-color: #fcfcfb; /* Fondo blanco */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Sombrita sutil para separar del scroll */
+}
+
+/* Ajuste para el logo y menú */
+.header__logo {
+  display: block;
+  width: 40px; /* Un poco más pequeño para que entre bien en los 100px de alto */
+  height: 40px;
+  background: #000000;
+  border-radius: 50%;
+  pointer-events: auto;
+  transition: transform 0.3s ease;
+}
+
+.header__nav {
+  pointer-events: auto;
+}
+
+.header__menu {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
+}
+
+.header__menu li {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Crea la línea | automáticamente entre los links */
+.header__menu li:not(:last-child)::after {
+  content: "|";
+  color: #000000;
+  opacity: 0.2;
+  font-weight: 400;
+}
+
+.header__link {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: opacity 0.3s ease;
+}
+
+.header__link:hover {
+  opacity: 0.5;
+}
+
+
+/* ============================================================
+   SECCIÓN 1: HERO
+   ============================================================ */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Obliga a que solo se vea esta sección al inicio */
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  overflow: hidden;
+  background: #fcfcfb;
+}
+
+/* El contenedor que bloquea la vista perfecta */
+.hero__container {
+  position: relative;
+  width: 1440px;
+  height: 680px;
+  flex-shrink: 0;
+  /* La magia: Escala dinámicamente según la ventana */
+  transform: scale(min(calc(100vw / 1440), calc(100vh / 680)));
+  transform-origin: center center;
+}
+
+/* Botón de reseteo de cámara (esquina superior derecha) */
+.hero__reset-btn {
+  position: absolute;
+  top: 70px;
+  right: 50px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.2s ease;
+  animation: ciclo-arcoiris 4s infinite;
+  z-index: 10;
+}
+
+.hero__reset-btn.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.hero__reset-btn:hover {
+  transform: scale(1.1);
+}
+
+@keyframes ciclo-arcoiris {
+  0%   { background-color: #ff0000; } /* Rojo */
+  25%  { background-color: #39ca04; } /* Verde */
+  50%  { background-color: #0900ff; } /* Azul */
+  75%  { background-color: #f4e434; } /* Amarillo */
+  100% { background-color: #ff0000; } /* Vuelve al Rojo */
+}
+
+/* Título PolkUp */
+.hero__title {
+  position: absolute;
+  top: 85px;
+  left: 71px;
+  font-size: 200px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -4px;
+  color: #000000;
+}
+
+/* Bloque de texto izquierdo */
+.hero__text-block {
+  position: absolute;
+  top: 320px;
+  left: 91px;
+  width: 553px;
+}
+
+.hero__subtitle {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 24px;
+}
+
+.hero__description {
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Modelo 3D canvas en el hero */
+.hero__canvas {
+  position: absolute;
+  top: -346px;
+  left: 300px;
+  width: 1514px;
+  height: 1384px;
+  pointer-events: auto; /* Mantiene tu página a salvo de bloqueos de scroll */
+  display: block;
+}
+
+/* Título y texto ocultos hasta que termina la intro */
+.hero__title--oculto,
+.hero__text-block--oculto {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.hero__title--visible,
+.hero__text-block--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Pantalla de intro bloqueante ─────────────────────────── */
+.intro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #ffffff;
+  z-index: 1000;
+  overflow: hidden;
+}
+.intro__canvas {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+.intro__hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #000000;
+  opacity: 0;
+  animation: parpadeo 2s ease-in-out 1s infinite;
+}
+@keyframes parpadeo {
+  0%, 100% { opacity: 0; }
+  50%       { opacity: 1; }
+}
+.intro.oculta {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+/* Header oculto durante la intro */
+.header--oculto {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.header {
+  transition: opacity 0.6s ease;
+}
+
+
+/* ============================================================
+   SECCIÓN 2: TABLERO
+   ============================================================ */
+.tablero {
+  padding: 40px 32px 20px;
+}
+ 
+/* Frase en dos columnas */
+.tablero__frase {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: -20px;
+}
+ 
+.tablero__frase-izq,
+.tablero__frase-der {
+  display: flex;
+  flex-direction: column;
+  font-size: 55px;
+  font-weight: 700;
+  line-height: 1.05;
+}
+ 
+.tablero__frase-der {
+  text-align: right;
+}
+ 
+/* Imagen del tablero (3 capas) */
+.tablero__imagen-wrap {
+  position: relative;
+  width: 100%;
+  height: 570px;
+  margin-bottom: 40px;
+}
+ 
+.tablero__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+ 
+/* Las 3 capas se superponen; la primera es el fondo de color (agrandar para que quede bien el parallax) */
+.tablero__img--1 { z-index: 3; }
+.tablero__img--2 { z-index: 2; }
+.tablero__img--3 { z-index: 1; }
+ 
+/* Leyenda inferior */
+.tablero__leyenda {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  padding: 0px 0 20px;
+  margin-top: -90px;
+}
+ 
+.tablero__leyenda-texto {
+  font-size: 23px;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 1.2;
+  text-align: center;
+}
+ 
+.tablero__leyenda-texto--right {
+  text-align: center;
+}
+ 
+.tablero__leyenda-icono {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+ 
+/* Subtítulo + cuerpo de texto al pie del tablero */
+.tablero__texto-bloque {
+  padding: 60px 0 40px;
+}
+ 
+.tablero__subtitulo {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 32px;
+  max-width: 820px;
+}
+ 
+.tablero__cuerpo {
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1.6;
+  max-width: 100%;
+  display: flex;
+  gap: 48px;
+}
+
+.tablero__cuerpo p {
+  flex: 1;
+}
+ 
+/* ============================================================
+   SECCIÓN 3: MECÁNICAS
+   ============================================================ */
+.mecanicas-wrap {
+  padding: 80px 32px;
+}
+ 
+.mecanicas__titulo {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 48px;
+}
+ 
+.mecanicas {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+ 
+/* Separador vertical entre mecánicas */
+.mecanica__separador {
+  width: 1px;
+  background: #000000;
+  align-self: stretch;
+  flex-shrink: 0;
+}
+ 
+/* Cada mecánica */
+.mecanica {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 32px;
+}
+ 
+.mecanica:first-child {
+  padding-left: 0;
+}
+ 
+.mecanica:last-child {
+  padding-right: 0;
+}
+ 
+/* Imagen de la mecánica */
+.mecanica__imagen-wrap {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+ 
+.mecanica__imagen {
+  max-height: 240px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease, opacity 0.2s ease;
+}
+ 
+/* Título EJE / GIRO / etc. */
+.mecanica__titulo {
+  font-size: 35px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+ 
+/* Descripción */
+.mecanica__texto {
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+ 
+/* ── Animaciones Hover mecánicas ──────────────────────────────────────── */
+ 
+/* EJE — péndulo */
+#mecanica-eje .mecanica__imagen {
+  transform-origin: top center;
+  transition: transform 0.0s;
+}
+#mecanica-eje .mecanica__imagen-wrap:hover .mecanica__imagen {
+  animation: pendulo 1.2s ease-in-out infinite;
+}
+@keyframes pendulo {
+  0%   { transform: rotate(0deg); }
+  25%  { transform: rotate(15deg); }
+  75%  { transform: rotate(-15deg); }
+  100% { transform: rotate(0deg); }
+}
+ 
+/* GIRO — rotación 360° */
+#mecanica-giro .mecanica__imagen-wrap:hover .mecanica__imagen {
+  animation: girar360 1s linear infinite;
+}
+@keyframes girar360 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+ 
+/* NIVELES — Contenedor relativo para evitar saltos */
+#mecanica-niveles .mecanica__imagen-wrap {
+  position: relative;
+  width: 100%;
+  height: 240px; /* Forzamos un alto fijo al contenedor para que no se mueva */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Base común para ambas imágenes */
+#mecanica-niveles .mecanica__imagen-wrap .mecanica__imagen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-height: 100%;
+  width: auto;
+  object-fit: contain;
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+/* Imagen Estática: Centrada normal */
+#mecanica-niveles .mecanica__imagen--static {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  z-index: 2;
+}
+
+/* GIF Animado; Compensacion de la diferencia de tamaño del archivo */
+#mecanica-niveles .mecanica__imagen--hover {
+  transform: translate(-50%, -50%) scale(0.40); 
+  opacity: 0;
+  z-index: 1;
+}
+
+/* ── COMPORTAMIENTO HOVER ── */
+
+/* Desaparece la estática */
+#mecanica-niveles .mecanica__imagen-wrap:hover .mecanica__imagen--static {
+  opacity: 0;
+}
+
+/* Aparece el GIF manteniendo su escala de compensación */
+#mecanica-niveles .mecanica__imagen-wrap:hover .mecanica__imagen--hover {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(0.85); /* Debe tener el mismo scale de arriba */
+}
+ 
+/* DECISIÓN — crece y rota en loop */
+#mecanica-decision .mecanica__imagen-wrap:hover .mecanica__imagen {
+  animation: crecer-rotar 1.5s ease-in-out infinite;
+}
+@keyframes crecer-rotar {
+  0%   { transform: scale(1)    rotate(0deg); }
+  50%  { transform: scale(1.15) rotate(180deg); }
+  100% { transform: scale(1)    rotate(360deg); }
+}
+ 
+/* META — sube levemente */
+#mecanica-meta .mecanica__imagen-wrap:hover .mecanica__imagen {
+  animation: subir 0.8s ease-in-out infinite alternate;
+}
+@keyframes subir {
+  from { transform: translateY(0px); }
+  to   { transform: translateY(-12px); }
+}
+ 
+/* ============================================================
+   SECCIÓN 4: GALERÍA 
+   ============================================================ */
+.galeria {
+  position: relative;
+  padding: 80px 72px;
+}
+
+.galeria__titulo {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 60px;
+  max-width: 500px;
+}
+
+.galeria__contenedor {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.galeria__tira {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(100%);
+  transition: transform 0.7s cubic-bezier(0.77, 0, 0.18, 1), opacity 0.5s ease;
+}
+
+.galeria__tira.activa {
+  position: relative;
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(0);
+}
+
+.galeria__foto-wrap {
+  width: 100%;
+}
+
+.galeria__foto-inner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.galeria__foto {
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  position: relative;
+}
+
+.galeria__foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.galeria__foto--placeholder {
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #aaaaaa;
+  font-family: 'Manrope', sans-serif;
+}
+
+/* Botones laterales — centrados verticalmente respecto al contenedor */
+.galeria__btn {
+  position: absolute;
+  top: calc(60px + 338px); /* titulo + mitad de la galeria aprox */
+  transform: translateY(-50%);
+  z-index: 10;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.galeria__btn--izq { left: 16px; }
+.galeria__btn--der { right: 16px; }
+
+.galeria__btn-circulo {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #0900ff;
+  opacity: 0.8;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+  border: none;
+}
+
+.galeria__btn:hover .galeria__btn-circulo {
+  opacity: 0.7;
+  transform: scale(1.1);
+}
+
+/* Indicadores */
+.galeria__indicadores {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.galeria__indicador {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  opacity: 0.3;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  display: block;
+}
+
+.galeria__indicador.activo {
+  opacity: 1;
+  transform: scale(1.3);
+}
+
+/* ============================================================
+   SECCIÓN 5: FUNDAMENTO
+   ============================================================ */
+.fundamento {
+  padding: 80px 32px;
+  min-height: 300px;
+}
+
+.fundamento__titulo {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.2;
+  max-width: 500px;
+}
+
+/* ============================================================
+   SECCIÓN 6: ESCALADOR + CTA
+   ============================================================ */
+.escalador {
+  display: flex;
+  align-items: flex-end;
+  padding: 80px 32px 0;
+  gap: 0;
+  min-height: 740px;
+  overflow: hidden;
+}
+
+/* Dibujo del escalador (izquierda) */
+.escalador__dibujo {
+  position: relative;
+  flex: 0 0 750px;
+  align-self: stretch;
+}
+
+.escalador__img {
+  position: absolute;
+  object-fit: cover;
+}
+
+.escalador__img--edificio {
+  top: 0;
+  left: 0;
+  width: 420px;
+  height: 718px;
+}
+
+.escalador__img--figura {
+  top: 312px;
+  left: 268px;
+  width: 183px;
+  height: 257px;
+}
+
+/* ── Escalador interactivo ── */
+.escalador__dibujo--interactivo {
+  cursor: pointer;
+}
+
+.escalador__img--inicio,
+.escalador__img--gif,
+.escalador__img--final {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: fill;
+}
+
+/* Transición de texto del escalador */
+.escalador__titulo {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.escalador__titulo.cambiando {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* Contenido derecho */
+.escalador__contenido {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-left: 40px;
+  padding-bottom: 80px;
+}
+
+/* Título grande */
+.escalador__titulo {
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: right;
+  margin-bottom: 64px;
+  margin-top: -100px;
+}
+
+/* ── Botón CTA ── */
+#cta-comenzar {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+#cta-comenzar.cta-visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.escalador__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.cta-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  /* Para futuros efectos hover */
+  transition: transform 0.3s ease;
+}
+
+.cta-btn:hover {
+  transform: scale(1.04);
+}
+
+.cta-btn:hover .cta-btn__circulo-outer {
+  border-color: #000000;
+  background: rgba(0,0,0,0.04);
+}
+
+/* Círculo exterior (borde) */
+.cta-btn__circulo-outer {
+  position: relative; 
+  width: 125px;
+  height: 125px;
+  border-radius: 50%;
+  border: 3.86px solid #000000;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+/* Punto negro interior */
+.cta-btn__circulo-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  background: #000000;
+  border-radius: 50%;
+}
+
+/* Cuadrado giratorio */
+.cta-btn__cuadrado {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 105px;
+  height: 105px;
+  border: 3px solid #000000;
+  transform: translate(-50%, -50%) scale(0) rotate(0deg);
+  transform-origin: center center;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.cta-btn:hover .cta-btn__cuadrado {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  animation: girar-cuadrado 2s linear infinite;
+}
+
+@keyframes girar-cuadrado {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Linea giratoria central */
+.cta-btn__linea {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 155px;
+  background: #000000;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cta-btn:hover .cta-btn__linea {
+  opacity: 1;
+  animation: girar-cuadrado 2s linear infinite;
+}
+
+/* Texto del botón */
+.cta-btn__texto {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: left;
+  color: #000000;
+  white-space: nowrap;
+}
+
+/* ── Animación arcoíris del título PolkUp ─────────────────── */
+
+/*
+  Cada letra pasa por: negro → COLOR → negro
+ 
+*/
+@keyframes letra-flash {
+  0%        { color: #000000; }
+  1%        { color: var(--color-letra); }
+  25%, 100% { color: #000000; }
+}
+
+/* Elevación suave — sube rápido, baja despacio, independiente del color */
+@keyframes letra-ola {
+  0%   { transform: translateY(0); }
+  15%  { transform: translateY(-18px); }
+  50%  { transform: translateY(0); }
+  100% { transform: translateY(0); }
+}
+
+.hero__title-letra {
+  display: inline-block;
+  color: inherit;
+}
+
+/* Dos animaciones en paralelo: color (steps) + elevación (ease) */
+#hero-title.arcoiris .hero__title-letra {
+  animation-name: letra-flash, letra-ola;
+  animation-duration: 0.9s, 0.9s;
+  animation-timing-function: steps(1, end), cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation-fill-mode: forwards, forwards;
+}
+
+/* ── Transición al hacer click ──────────────────── */
+.cta-btn.is-active .cta-btn__circulo-outer {
+  background: #000000;
+  transition: background 0.4s ease;
+}
+
+.cta-btn.is-active .cta-btn__circulo-inner {
+  background: #ffffff;
+}
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+
+/* Clase para animaciones de scroll (se agrego en el JS) */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Reducir movimiento si el usuario lo prefiere */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+  .cta-btn {
+    transition: none;
+  }
+}
+/* Header fijo  */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background-color: #fcfcfb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 50px;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.header__logo {
+  width: 30px;
+  height: 30px;
+  background: #000;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.header__menu {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+
+.header__menu li:not(:last-child)::after {
+  content: "|";
+  margin-left: 20px;
+  opacity: 0.3;
+}
+
+.header__link {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+  text-transform: uppercase;
+}
+
+/* ── Botón "Iniciar el ascenso" en el hero (esquina inferior derecha) ── */
+.hero__ascenso-btn {
+  position: absolute;
+  bottom: 50px;
+  right: 0px;
+  display: inline-block;
+  padding: 10px 18px;
+  border: 1.5px solid #000000;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  line-height: 1;
+  white-space: nowrap;
+  z-index: 10;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.hero__ascenso-btn:hover {
+  background: #000000;
+  color: #fcfcfb;
+}
