@@ -524,7 +524,7 @@ img {
   z-index: 2;
 }
 
-/* GIF Animado: Aquí compensamos la diferencia de tamaño del archivo */
+/* GIF Animado; Compensacion de la diferencia de tamaño del archivo */
 #mecanica-niveles .mecanica__imagen--hover {
   transform: translate(-50%, -50%) scale(0.40); 
   opacity: 0;
@@ -746,7 +746,7 @@ img {
   height: 257px;
 }
 
-/* ── Escalador interactivo ──────────────────────────────── */
+/* ── Escalador interactivo ── */
 .escalador__dibujo--interactivo {
   cursor: pointer;
 }
@@ -792,7 +792,7 @@ img {
   margin-top: -100px;
 }
 
-/* ── Botón CTA ────────────────────────────────────────────── */
+/* ── Botón CTA ── */
 #cta-comenzar {
   opacity: 0;
   pointer-events: none;
@@ -912,7 +912,7 @@ img {
 
 /*
   Cada letra pasa por: negro → COLOR → negro
-  usando steps(1) para que el cambio sea instantáneo, sin mezcla.
+ 
 */
 @keyframes letra-flash {
   0%        { color: #000000; }
@@ -941,7 +941,7 @@ img {
   animation-fill-mode: forwards, forwards;
 }
 
-/* ── Estado de transición al hacer click ──────────────────── */
+/* ── Transición al hacer click ──────────────────── */
 .cta-btn.is-active .cta-btn__circulo-outer {
   background: #000000;
   transition: background 0.4s ease;
@@ -955,7 +955,7 @@ img {
    UTILIDADES
    ============================================================ */
 
-/* Clase para animaciones de scroll (se agrega con JS) */
+/* Clase para animaciones de scroll (se agrego en el JS) */
 .fade-in {
   opacity: 0;
   transform: translateY(30px);
@@ -978,7 +978,7 @@ img {
     transition: none;
   }
 }
-/* Header fijo minimalista */
+/* Header fijo  */
 .header {
   position: fixed;
   top: 0;

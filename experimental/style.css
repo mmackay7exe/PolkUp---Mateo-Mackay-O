@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;700;800&display=swap');
+
+:root {
+    --bg-pure: #ffffff;
+    --text-main: #111111;
+    --border-light: #e5e5e5;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: var(--bg-pure);
+    font-family: 'Manrope', sans-serif;
+    color: var(--text-main);
+    user-select: none;
+}
+
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 40px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: auto;
+}
+
+.brand {
+    font-size: 11px;
+    letter-spacing: 2px;
+    line-height: 1.4;
+}
+
+#level-display {
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+button {
+    background: var(--bg-pure);
+    border: 1px solid var(--text-main);
+    color: var(--text-main);
+    padding: 12px 24px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 0;
+    pointer-events: auto;
+}
+
+button:hover {
+    background: var(--text-main);
+    color: var(--bg-pure);
+}
+
+#btn-left {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+}
+
+#btn-right {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+}
+
+.target-container {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--bg-pure);
+    padding: 12px 24px;
+    border: 1px solid var(--border-light);
+    pointer-events: auto;
+}
+
+.label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #666;
+}
+
+#color-target {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 2px solid rgba(0,0,0,0.15);
+    transition: background-color 0.3s ease;
+}
+
+/* --- ESTILOS DEL MINIJUEGO ECLIPSE --- */
+#eclipse-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #050505; /* Negro puro casi absoluto */
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    pointer-events: auto;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 1s ease;
+}
+
+#eclipse-title {
+    font-size: 80px;
+    letter-spacing: 24px;
+    margin-bottom: 20px;
+    font-weight: 800;
+    margin-left: 24px; /* Compensar visualmente el tracking */
+}
+
+#eclipse-overlay p {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.8;
+    letter-spacing: 1.5px;
+    margin-bottom: 50px;
+    max-width: 500px;
+    color: #aaaaaa;
+}
+
+#btn-eclipse-start {
+    background: transparent;
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+#btn-eclipse-start:hover {
+    background: #ffffff;
+    color: #000000;
+}
+
+.hidden-fade {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- ESTILOS DEL MINIJUEGO TENSIÓN ESTRUCTURAL --- */
+#tension-ui {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 100;
+    pointer-events: none; /* Los clics pasan a través de la UI hacia el 3D */
+    width: 100%;
+}
+
+.tension-warning {
+    font-size: 32px;
+    font-weight: 800;
+    color: #DA251D;
+    letter-spacing: 4px;
+    animation: flashAlert 0.15s infinite alternate;
+    text-shadow: 0px 4px 15px rgba(218, 37, 29, 0.5);
+}
+
+.tension-sub {
+    font-size: 14px;
+    color: var(--text-main);
+    margin-top: 8px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.tension-bar-container {
+    width: 300px;
+    height: 12px;
+    border: 2px solid var(--text-main);
+    margin: 20px auto;
+    background: var(--bg-pure);
+    position: relative;
+}
+
+#tension-progress {
+    width: 0%;
+    height: 100%;
+    background: #DA251D;
+    transition: width 0.1s linear;
+}
+
+@keyframes flashAlert {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0.5; transform: scale(1.05); }
+}

@@ -485,8 +485,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnComenzar) {
     btnComenzar.addEventListener('click', () => {
       btnComenzar.classList.add('is-active');
-      setTimeout(() => btnComenzar.classList.remove('is-active'), 500);
-      document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => {
+        btnComenzar.classList.remove('is-active');
+        window.location.href = 'experimental/index.html';
+      }, 500);
     });
   }
 

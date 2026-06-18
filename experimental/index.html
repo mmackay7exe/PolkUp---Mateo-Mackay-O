@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolkUp - Experimental</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="ui-layer">
+        <header>
+            <div class="brand">POLK <br><strong>UP</strong></div>
+            <div id="level-display">NIVEL 0 / POLKUP</div>
+            <button id="btn-mode">MODO: SANDBOX</button>
+        </header>
+
+        <button id="btn-left" class="btn-rot">&larr; ROTAR NIVEL</button>
+        
+        <div id="game-ui" class="target-container">
+            <span id="target-label" class="label">BUSCAR NODO:</span>
+            <div id="color-target"></div>
+        </div>
+        
+        <button id="btn-right" class="btn-rot">ROTAR NIVEL &rarr;</button>
+    </div>
+
+    <div id="eclipse-overlay" class="hidden-fade">
+        <h1 id="eclipse-title">
+            <span style="color:#DA251D">E</span>
+            <span style="color:#FFC72C">C</span>
+            <span style="color:#00539B">L</span>
+            <span style="color:#00853F">I</span>
+            <span style="color:#DA251D">P</span>
+            <span style="color:#FFC72C">S</span>
+            <span style="color:#00539B">E</span>
+        </h1>
+        <p>La iluminación general ha colapsado.<br>Utiliza tu cursor como un foco de luz sobre la estructura para explorar a ciegas y encontrar el siguiente nodo de color.</p>
+        <button id="btn-eclipse-start">ADENTRARSE EN LA OSCURIDAD</button>
+    </div>
+
+    <div id="tension-ui" class="hidden">
+        <div class="tension-warning">¡TENSIÓN ESTRUCTURAL!</div>
+        <div class="tension-sub">CLICA RÁPIDO PARA FORZAR EL ANCLAJE</div>
+        <div class="tension-bar-container">
+            <div id="tension-progress"></div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
