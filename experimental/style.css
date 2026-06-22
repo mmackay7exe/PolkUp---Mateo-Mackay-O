@@ -35,21 +35,28 @@ header {
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     pointer-events: auto;
 }
 
 .brand {
-    font-size: 11px;
+    font-size: 28px; 
     letter-spacing: 2px;
-    line-height: 1.4;
+    line-height: 1.1;
+    font-weight: 800;
 }
 
+/* Modificado: Letra mucho más oscura y sólida */
 #level-display {
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 800;
+    color: #111111; 
     letter-spacing: 2px;
     text-transform: uppercase;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 40px; 
 }
 
 button {
@@ -72,16 +79,12 @@ button:hover {
     color: var(--bg-pure);
 }
 
-#btn-left {
+#btn-volver {
     position: absolute;
     bottom: 40px;
     left: 40px;
-}
-
-#btn-right {
-    position: absolute;
-    bottom: 40px;
-    right: 40px;
+    padding: 8px 16px;
+    font-size: 9px;
 }
 
 .target-container {
@@ -96,13 +99,14 @@ button:hover {
     padding: 12px 24px;
     border: 1px solid var(--border-light);
     pointer-events: auto;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .label {
     font-size: 10px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 1.5px;
-    color: #666;
+    color: #111111; 
 }
 
 #color-target {
@@ -114,11 +118,135 @@ button:hover {
     transition: background-color 0.3s ease;
 }
 
-/* --- ESTILOS DEL MINIJUEGO ECLIPSE --- */
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--text-main);
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 800;
+    padding: 0;
+}
+
+.btn-rot-lateral {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    font-size: 64px; 
+    font-weight: 300;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.3;
+    padding: 20px;
+}
+.btn-rot-lateral:hover {
+    background: transparent;
+    color: var(--text-main);
+    opacity: 1;
+}
+#btn-left { left: 2vw; }
+#btn-left:hover { transform: translateY(-50%) translateX(-5px); }
+#btn-right { right: 2vw; }
+#btn-right:hover { transform: translateY(-50%) translateX(5px); }
+
+.full-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto;
+    transition: opacity 0.4s ease;
+    opacity: 1;
+    text-align: center;
+    padding: 40px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.full-panel.hidden-fade {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.full-panel .close-btn {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+}
+
+.full-panel-content {
+    max-width: 900px;
+    width: 100%;
+}
+
+.full-panel h2 {
+    font-size: 36px;
+    letter-spacing: 6px;
+    margin-bottom: 24px;
+    font-weight: 800;
+}
+
+.intro-reglas {
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 60px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.reglas-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 60px 40px;
+    text-align: left;
+}
+
+.reglas-item h3 {
+    font-size: 14px;
+    color: var(--text-main);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    font-weight: 800;
+}
+
+.reglas-item p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #555;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* --- CLASE NUEVA: DESVANECIMIENTO LIMPIO UI --- */
+.fade-hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.5s ease;
+}
+
 #eclipse-overlay {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background-color: #050505; /* Negro puro casi absoluto */
+    background-color: #050505;
     color: #ffffff;
     display: flex;
     flex-direction: column;
@@ -136,7 +264,7 @@ button:hover {
     letter-spacing: 24px;
     margin-bottom: 20px;
     font-weight: 800;
-    margin-left: 24px; /* Compensar visualmente el tracking */
+    margin-left: 24px;
 }
 
 #eclipse-overlay p {
@@ -165,11 +293,14 @@ button:hover {
     pointer-events: none !important;
 }
 
+.hidden-fade * {
+    pointer-events: none !important;
+}
+
 .hidden {
     display: none !important;
 }
 
-/* --- ESTILOS DEL MINIJUEGO TENSIÓN ESTRUCTURAL --- */
 #tension-ui {
     position: absolute;
     top: 20%;
@@ -177,7 +308,7 @@ button:hover {
     transform: translateX(-50%);
     text-align: center;
     z-index: 100;
-    pointer-events: none; /* Los clics pasan a través de la UI hacia el 3D */
+    pointer-events: none;
     width: 100%;
 }
 
@@ -217,4 +348,222 @@ button:hover {
 @keyframes flashAlert {
     from { opacity: 1; transform: scale(1); }
     to { opacity: 0.5; transform: scale(1.05); }
+}
+
+#torbellino-ui {
+    position: absolute;
+    top: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 100;
+    pointer-events: none;
+    width: 100%;
+    color: #ffffff;
+}
+
+.torbellino-progress-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.torbellino-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    background: transparent;
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.torbellino-dot.found {
+    background-color: #9D4EDD;
+    border-color: #9D4EDD;
+    box-shadow: 0px 0px 12px rgba(157, 78, 221, 0.9);
+}
+
+#gravedad-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: var(--bg-pure); 
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    pointer-events: none; 
+    text-align: center;
+    opacity: 1;
+    transition: opacity 1s ease;
+}
+
+#gravedad-alerta-titulo {
+    font-size: 56px;
+    letter-spacing: 10px;
+    margin-bottom: 24px;
+    font-weight: 800;
+    animation: balizaRoja 1.5s infinite ease-in-out; 
+}
+
+@keyframes balizaRoja {
+    0%, 100% { color: var(--text-main); } 
+    50% { color: #DA251D; } 
+}
+
+#gravedad-overlay p {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.8;
+    letter-spacing: 1px;
+    margin-bottom: 48px;
+    max-width: 600px;
+    color: #444444; 
+}
+
+#btn-gravedad-start {
+    background: var(--text-main);
+    color: var(--bg-pure);
+    border: 2px solid var(--text-main);
+    font-size: 13px;
+    padding: 16px 32px;
+    font-weight: 700;
+}
+
+#btn-gravedad-start:hover {
+    background: #DA251D;
+    border-color: #DA251D;
+    color: var(--bg-pure);
+}
+
+#torbellino-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: var(--bg-pure);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    pointer-events: none;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 1s ease;
+}
+
+#torbellino-alerta-titulo {
+    font-size: 56px;
+    letter-spacing: 10px;
+    margin-bottom: 24px;
+    font-weight: 800;
+    animation: balizaMorada 1.5s infinite ease-in-out; 
+}
+
+@keyframes balizaMorada {
+    0%, 100% { color: var(--text-main); }
+    50% { color: #9D4EDD; } 
+}
+
+#torbellino-overlay p {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.8;
+    letter-spacing: 1px;
+    margin-bottom: 48px;
+    max-width: 600px;
+    color: #444444;
+}
+
+#btn-torbellino-start {
+    background: var(--text-main);
+    color: var(--bg-pure);
+    border: 2px solid var(--text-main);
+    font-size: 13px;
+    padding: 16px 32px;
+    font-weight: 700;
+}
+
+#btn-torbellino-start:hover {
+    background: #9D4EDD;
+    border-color: #9D4EDD;
+    color: var(--bg-pure);
+}
+
+/* UI FINAL VICTORIA */
+#win-title {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: var(--text-main);
+    z-index: 100;
+    pointer-events: none;
+    transition: opacity 1s ease;
+    text-align: center;
+}
+
+#btn-restart {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    z-index: 100;
+    transition: opacity 1s ease;
+}
+
+@media (max-width: 768px) {
+    .reglas-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    .full-panel h2 {
+        font-size: 24px;
+    }
+    #win-title {
+        font-size: 28px;
+    }
+}
+
+/* --- INVERSIÓN DE COLORES DURANTE ECLIPSE --- */
+.eclipse-ui .brand,
+.eclipse-ui #level-display,
+.eclipse-ui .label {
+    color: #ffffff !important;
+}
+
+.eclipse-ui button {
+    background: transparent !important;
+    border-color: #ffffff !important;
+    color: #ffffff !important;
+}
+
+.eclipse-ui button:hover {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+.eclipse-ui .btn-rot-lateral {
+    color: #ffffff !important;
+    background: transparent !important;
+}
+
+.eclipse-ui .btn-rot-lateral:hover {
+    opacity: 1 !important;
+    color: #ffffff !important;
+    background: transparent !important;
+}
+
+/* CORRECCIÓN: Caja interior negra, borde blanco, conservando el círculo de color intacto */
+.eclipse-ui .target-container {
+    background-color: #050505 !important;
+    border-color: #ffffff !important;
+}
+
+.eclipse-ui #color-target {
+    border-color: rgba(255, 255, 255, 0.5) !important;
 }
