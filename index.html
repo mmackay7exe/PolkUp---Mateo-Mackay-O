@@ -26,7 +26,7 @@
       <ul class="header__menu">
         <li><a href="#hero" class="header__link">PolkUp</a></li>
         <li><a href="#tablero" class="header__link">Intro</a></li>
-        <li><a href="#mecanicas" class="header__link">Mecánicas</a></li>
+        <li><a href="#objetivo" class="header__link">Objetivo del juego</a></li>
         <li><a href="#galeria" class="header__link">Galería</a></li>
         <li><a href="#fundamento" class="header__link">Fundamento</a></li>
         <li><a href="#escalador" class="header__link">Experimental</a></li>
@@ -45,7 +45,7 @@
       <ul class="header__menu">
         <li><a href="#hero" class="header__link">PolkUp</a></li>
         <li><a href="#tablero" class="header__link">Intro</a></li>
-        <li><a href="#mecanicas" class="header__link">Mecánicas</a></li>
+        <li><a href="#objetivo" class="header__link">Objetivo del juego</a></li>
         <li><a href="#galeria" class="header__link">Galería</a></li>
         <li><a href="#fundamento" class="header__link">Fundamento</a></li>
         <li><a href="#escalador" class="header__link">Experimental</a></li>
@@ -117,6 +117,41 @@
       <div class="tablero__cuerpo">
         <p>PolkUp nace del estudio del movimiento y de la observación de cómo el cuerpo interactúa con el espacio habitado. El proyecto comenzó explorando la abstracción de un gesto simple y su capacidad para transformar radicalmente una superficie bidimensional. A través de la experimentación con el rigor geométrico y la verticalidad, esa primera búsqueda formal evolucionó hacia un sistema constructivo modular: una torre compuesta por niveles interconectados que desafían la noción tradicional de un tablero estático y plano.</p>
         <p>Este desarrollo se transformó así en un profundo desafío de diseño de interacción, donde la física del objeto y la experiencia lúdica convergen. El juego propone una estructura viva donde la rotación del eje central y el equilibrio precario de las varillas de apoyo interactúan directamente con las decisiones de los jugadores. Cada movimiento no solo altera la topografía física de la torre, sino que redefine constantemente la perspectiva, el horizonte y el recorrido de los contrincantes, convirtiendo el ascenso en una constante exploración de lo impredecible.</p>
+      </div>
+    </div>
+
+    <div class="tablero__texto-bloque fade-in" id="objetivo">
+      <h2 class="tablero__subtitulo">Objetivo del juego</h2>
+      <div class="tablero__cuerpo">
+        <p>El objetivo es alcanzar la cima de una torre de niveles independientes que giran sobre un eje central. Utilizando un sistema físico de varillas como únicos puntos de apoyo y anclaje, los jugadores deben asegurar su estabilidad material mientras alteran la estructura del tablero para obstruir a sus oponentes.</p>
+      </div>
+      <div class="tablero__tabla-wrap">
+        <table class="tablero__tabla">
+          <thead>
+            <tr>
+              <th>Componente Físico</th>
+              <th>Función Mecánica</th>
+              <th>Impacto en la Partida</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Eje Central</strong></td>
+              <td>Soporte vertical</td>
+              <td>Vincula los módulos y permite la rotación independiente.</td>
+            </tr>
+            <tr>
+              <td><strong>Niveles Modulares</strong></td>
+              <td>Plataformas móviles</td>
+              <td>Alteran las rutas de paso y los puntos de anclaje disponibles.</td>
+            </tr>
+            <tr>
+              <td><strong>Varillas de Apoyo</strong></td>
+              <td>Herramienta de avance</td>
+              <td>Sustentan físicamente la posición del jugador en la estructura.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
  
@@ -277,6 +312,23 @@
 
   <section class="fundamento fade-in" id="fundamento">
     <h2 class="fundamento__titulo">Fundamento</h2>
+
+    
+      <div class="fundamento__sub-bloque">
+        <h4 class="fundamento__h4">Conceptos Escogidos</h4>
+        <p class="fundamento__texto">La columna vertebral de prácticamente cualquier juego de mesa es la exploración del tablero para cumplir con los objetivos planteados. PolkUp se diferencia al salir del plano bidimensional y traer a la mesa una estructura tridimensional que rota en cualquier dirección, mostrando de manera física y visual cómo el camino varía en cada momento. Junto a esto, las cartas que afectan la escalada son un elemento lúdico fundamental para transformar el trayecto hacia la cima en un recorrido tridimensional dinámico.</p>
+      </div>
+
+      <div class="fundamento__sub-bloque">
+        <h4 class="fundamento__h4">Reconceptualización</h4>
+        <p class="fundamento__texto">Esta experiencia experimental no es una réplica virtual 1:1 del juego de mesa, sino una abstracción de sus cualidades físicas traducidas a interacciones a través del código. El proyecto traslada los rasgos centrales del tablero físico —la tridimensionalidad constructiva, el recorrido del escalador, el riesgo del error y el reconocimiento de nodos cromáticos— hacia un entorno digital que exige atención y motricidad adaptativa. Aquí, el código no simula: traduce la tensión, el cálculo táctico y el riesgo lúdico en una interfaz de precisión cinemática.</p>
+        <ul class="fundamento__lista">
+          <li><strong>Tridimensionalidad y Recorrido:</strong> La navegación se desarrolla mediante una exploración continua tridimensional con nodos aleatorios en cada partida. El usuario está obligado a orbitar la cámara y rotar las piezas para descubrir y trazar el camino de la ascensión.</li>
+          <li><strong>Motricidad y Error ante la Anomalía:</strong> La resistencia y tensión de los distintos eventos físicos se digitalizaron para transmitir urgencia. El usuario debe aplicar una respuesta motriz directa a través de clics veloces y prestar atención para reconocer los nodos, recorriendo el espacio y evitando el colapso en la subida.</li>
+        </ul>
+      </div>
+    </div>
+
   </section>
 
   <hr class="divider">
@@ -302,11 +354,7 @@
 
       <div class="escalador__cta">
         <button class="cta-btn" id="cta-comenzar" aria-label="Comenzar experiencia">
-          <span class="cta-btn__circulo-outer">
-            <span class="cta-btn__circulo-inner"></span>
-            <span class="cta-btn__cuadrado"></span>
-            <span class="cta-btn__linea"></span>
-          </span>
+          <span class="cta-btn__circulo"></span>
           <span class="cta-btn__texto">comenzar<br>experiencia</span>
         </button>
       </div>

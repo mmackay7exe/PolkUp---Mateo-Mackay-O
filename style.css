@@ -392,6 +392,42 @@ img {
 .tablero__cuerpo p {
   flex: 1;
 }
+
+/* Tabla Objetivo del juego */
+.tablero__tabla-wrap {
+  margin-top: 40px;
+  overflow-x: auto;
+}
+
+.tablero__tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.tablero__tabla th,
+.tablero__tabla td {
+  border: 1px solid #000000;
+  padding: 20px 24px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.tablero__tabla thead th {
+  font-weight: 700;
+  font-size: 20px;
+  background: none;
+}
+
+.tablero__tabla tbody tr td:first-child {
+  font-weight: 700;
+}
+
+.tablero__tabla tbody tr:nth-child(odd) {
+  background: rgba(0, 0, 0, 0.02);
+}
  
 /* ============================================================
    SECCIÓN 3: MECÁNICAS
@@ -708,6 +744,66 @@ img {
   max-width: 500px;
 }
 
+.fundamento__bloque {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.fundamento__subtitulo {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  margin-bottom: 8px;
+}
+
+.fundamento__sub-bloque {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fundamento__h4 {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.fundamento__texto {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.fundamento__lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fundamento__lista li {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+  padding-left: 20px;
+  position: relative;
+}
+
+.fundamento__lista li::before {
+  content: "·";
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+}
+
 /* ============================================================
    SECCIÓN 6: ESCALADOR + CTA
    ============================================================ */
@@ -811,7 +907,6 @@ img {
 }
 
 .cta-btn {
-  position: relative;
   display: flex;
   align-items: center;
   gap: 20px;
@@ -819,7 +914,6 @@ img {
   background: none;
   border: none;
   padding: 0;
-  /* Para futuros efectos hover */
   transition: transform 0.3s ease;
 }
 
@@ -827,75 +921,21 @@ img {
   transform: scale(1.04);
 }
 
-.cta-btn:hover .cta-btn__circulo-outer {
-  border-color: #000000;
-  background: rgba(0,0,0,0.04);
-}
-
-/* Círculo exterior (borde) */
-.cta-btn__circulo-outer {
-  position: relative; 
+/* Círculo sólido de color */
+.cta-btn__circulo {
   width: 125px;
   height: 125px;
   border-radius: 50%;
-  border: 3.86px solid #000000;
   flex-shrink: 0;
-  transition: background 0.3s ease;
+  background: #0900ff;
+  animation: cta-color-cycle 2s steps(1, end) infinite;
 }
 
-/* Punto negro interior */
-.cta-btn__circulo-inner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 24px;
-  height: 24px;
-  background: #000000;
-  border-radius: 50%;
-}
-
-/* Cuadrado giratorio */
-.cta-btn__cuadrado {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 105px;
-  height: 105px;
-  border: 3px solid #000000;
-  transform: translate(-50%, -50%) scale(0) rotate(0deg);
-  transform-origin: center center;
-  opacity: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.cta-btn:hover .cta-btn__cuadrado {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1) rotate(0deg);
-  animation: girar-cuadrado 2s linear infinite;
-}
-
-@keyframes girar-cuadrado {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to   { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-/* Linea giratoria central */
-.cta-btn__linea {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 2px;
-  height: 155px;
-  background: #000000;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.cta-btn:hover .cta-btn__linea {
-  opacity: 1;
-  animation: girar-cuadrado 2s linear infinite;
+@keyframes cta-color-cycle {
+  0%   { background: #0900ff; }
+  25%  { background: #ff0000; }
+  50%  { background: #39ca04; }
+  75%  { background: #f4e434; }
 }
 
 /* Texto del botón */
@@ -904,8 +944,28 @@ img {
   font-weight: 700;
   line-height: 1.1;
   text-align: left;
-  color: #000000;
+  color: #0900ff;
   white-space: nowrap;
+  animation: cta-color-cycle-text 2s steps(1, end) infinite;
+}
+
+@keyframes cta-color-cycle-text {
+  0%   { color: #0900ff; }
+  25%  { color: #ff0000; }
+  50%  { color: #39ca04; }
+  75%  { color: #f4e434; }
+}
+
+/* ── Transición al hacer click ──────────────────── */
+.cta-btn.is-active .cta-btn__circulo {
+  background: #000000;
+  animation: none;
+  transition: background 0.4s ease;
+}
+
+.cta-btn.is-active .cta-btn__texto {
+  color: #000000;
+  animation: none;
 }
 
 /* ── Animación arcoíris del título PolkUp ─────────────────── */
