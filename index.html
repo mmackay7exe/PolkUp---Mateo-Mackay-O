@@ -70,9 +70,9 @@
       <div class="hero__text-block hero__text-block--oculto">
         <p class="hero__subtitle">Gira. Adáptate. Asciende.</p>
         <p class="hero__description">
-         Un juego táctico de movimiento tridimensional. 
-         Con solo dos varillas como apoyo, deberás ascender por una torre modular en constante rotación. 
-         Un espacio cambiante donde cada nivel que gira transforma tu ruta hacia la cima.
+         Un <strong>juego táctico de movimiento tridimensional</strong>. 
+         Con solo <strong>dos varillas como apoyo</strong>, deberás ascender por una <strong>torre modular en constante rotación</strong>. 
+         Un <strong>espacio cambiante</strong> donde cada nivel que gira <strong>transforma tu ruta</strong> hacia la cima.
         </p>
       </div>
 
@@ -88,7 +88,27 @@
   <hr class="divider">
 
  <section class="tablero" id="tablero">
+
+    <div class="tablero__bg">
+      <div class="tablero__circulo tablero__circulo--1"></div>
+      <div class="tablero__circulo tablero__circulo--2"></div>
+      <div class="tablero__circulo tablero__circulo--3"></div>
+      <div class="tablero__circulo tablero__circulo--4"></div>
+    </div>
  
+    <div class="tablero__texto-bloque fade-in">
+      <h2 class="tablero__subtitulo">Del gesto observado a la tridimensionalidad del juego.</h2>
+      
+      <div class="tablero__grid">
+        <div class="tablero__caja">
+          <p class="tablero__texto"><strong>PolkUp nace de observar cómo el cuerpo interactúa con el espacio</strong>, evolucionando hacia un sistema constructivo modular: una torre de <strong>niveles interconectados</strong> que desafía el tradicional tablero plano.</p>
+        </div>
+        <div class="tablero__caja">
+          <p class="tablero__texto">El juego propone una <strong>estructura viva</strong> donde la <strong>rotación del eje central y el equilibrio de las varillas</strong> responden a las decisiones del jugador. Cada movimiento <strong>altera físicamente la torre y redefine el recorrido</strong>, convirtiendo el ascenso en una <strong>exploración constante de lo impredecible</strong>.</p>
+        </div>
+      </div>
+    </div>
+
     <div class="tablero__frase fade-in">
       <div class="tablero__frase-izq">
         <span>no hay horizonte</span>
@@ -99,31 +119,28 @@
         <span>del ascenso</span>
       </div>
     </div>
- 
+
     <div class="tablero__imagen-wrap fade-in delay-2" data-parallax="0.04">
       <img class="tablero__img tablero__img--1" src="assets/dibujo-horizontal-1-01-10.png" alt="Tablero PolkUp capa 1">
       <img class="tablero__img tablero__img--2" src="assets/dibujo-horizontal-2-01-10.png" alt="Tablero PolkUp capa 2">
       <img class="tablero__img tablero__img--3" src="assets/dibujo-horizontal-3-01-10.png" alt="Tablero PolkUp capa 3">
     </div>
- 
+
     <div class="tablero__leyenda fade-in delay-3">
       <span class="tablero__leyenda-texto">EL TABLERO<br>CAMBIA</span>
       <img class="tablero__leyenda-icono" src="assets/animacionrotacion0.svg" alt="Ícono tablero">
       <span class="tablero__leyenda-texto tablero__leyenda-texto--right">TÚ DECIDES<br>EL CAMINO</span>
     </div>
  
-    <div class="tablero__texto-bloque fade-in">
-      <h2 class="tablero__subtitulo">Del gesto observado a la tridimensionalidad del juego.</h2>
-      <div class="tablero__cuerpo">
-        <p>PolkUp nace del estudio del movimiento y de la observación de cómo el cuerpo interactúa con el espacio habitado. El proyecto comenzó explorando la abstracción de un gesto simple y su capacidad para transformar radicalmente una superficie bidimensional. A través de la experimentación con el rigor geométrico y la verticalidad, esa primera búsqueda formal evolucionó hacia un sistema constructivo modular: una torre compuesta por niveles interconectados que desafían la noción tradicional de un tablero estático y plano.</p>
-        <p>Este desarrollo se transformó así en un profundo desafío de diseño de interacción, donde la física del objeto y la experiencia lúdica convergen. El juego propone una estructura viva donde la rotación del eje central y el equilibrio precario de las varillas de apoyo interactúan directamente con las decisiones de los jugadores. Cada movimiento no solo altera la topografía física de la torre, sino que redefine constantemente la perspectiva, el horizonte y el recorrido de los contrincantes, convirtiendo el ascenso en una constante exploración de lo impredecible.</p>
-      </div>
-    </div>
+  </section>
 
-    <div class="tablero__texto-bloque fade-in" id="objetivo">
+  <hr class="divider">
+
+  <section class="tablero" id="objetivo">
+    <div class="tablero__texto-bloque fade-in">
       <h2 class="tablero__subtitulo">Objetivo del juego</h2>
       <div class="tablero__cuerpo">
-        <p>El objetivo es alcanzar la cima de una torre de niveles independientes que giran sobre un eje central. Utilizando un sistema físico de varillas como únicos puntos de apoyo y anclaje, los jugadores deben asegurar su estabilidad material mientras alteran la estructura del tablero para obstruir a sus oponentes.</p>
+        <p>El objetivo es <strong>alcanzar la cima</strong> de una torre de niveles independientes que <strong>giran sobre un eje central</strong>. Utilizando un sistema físico de varillas como <strong>únicos puntos de apoyo y anclaje</strong>, los jugadores deben <strong>asegurar su estabilidad material</strong> mientras alteran la estructura del tablero para <strong>obstruir a sus oponentes</strong>.</p>
       </div>
       <div class="tablero__tabla-wrap">
         <table class="tablero__tabla">
@@ -137,24 +154,23 @@
           <tbody>
             <tr>
               <td><strong>Eje Central</strong></td>
-              <td>Soporte vertical</td>
-              <td>Vincula los módulos y permite la rotación independiente.</td>
+              <td><strong>Soporte vertical</strong></td>
+              <td>Vincula los módulos y permite la <strong>rotación independiente</strong>.</td>
             </tr>
             <tr>
               <td><strong>Niveles Modulares</strong></td>
-              <td>Plataformas móviles</td>
-              <td>Alteran las rutas de paso y los puntos de anclaje disponibles.</td>
+              <td><strong>Plataformas móviles</strong></td>
+              <td>Alteran las rutas de paso y los <strong>puntos de anclaje</strong> disponibles.</td>
             </tr>
             <tr>
               <td><strong>Varillas de Apoyo</strong></td>
-              <td>Herramienta de avance</td>
-              <td>Sustentan físicamente la posición del jugador en la estructura.</td>
+              <td><strong>Herramienta de avance</strong></td>
+              <td>Sustentan físicamente la <strong>posición del jugador</strong> en la estructura.</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
- 
   </section>
  
   <hr class="divider">
@@ -171,8 +187,7 @@
       </div>
       <h3 class="mecanica__titulo">EJE</h3>
       <p class="mecanica__texto">
-        Todo gira en torno a un centro.
-        El eje organiza el espacio y da sentido al movimiento
+        <strong>Todo gira en torno a un centro</strong>. El eje <strong>organiza el espacio</strong> y da sentido al movimiento.
       </p>
     </div>
  
@@ -184,7 +199,7 @@
       </div>
       <h3 class="mecanica__titulo">GIRO</h3>
       <p class="mecanica__texto">
-        Al girar, el jugador transforma su entorno y descubre nuevas posibilidades.
+        Al girar, el jugador <strong>transforma su entorno</strong> y descubre <strong>nuevas posibilidades</strong>.
       </p>
     </div>
  
@@ -197,7 +212,7 @@
       </div>
       <h3 class="mecanica__titulo">NIVELES</h3>
       <p class="mecanica__texto">
-        Cada nivel es un desafío. Ascender implica adaptarse y elegir el próximo paso
+        Cada nivel es un <strong>desafío</strong>. Ascender implica <strong>adaptarse</strong> y <strong>elegir el próximo paso</strong>.
       </p>
     </div>
  
@@ -209,7 +224,7 @@
       </div>
       <h3 class="mecanica__titulo">DECISIÓN</h3>
       <p class="mecanica__texto">
-        No existe un único camino. Cada decisión cambia el recorrido y redefine el horizonte
+        <strong>No existe un único camino</strong>. Cada decisión <strong>cambia el recorrido</strong> y redefine el horizonte.
       </p>
     </div>
  
@@ -221,7 +236,7 @@
       </div>
       <h3 class="mecanica__titulo">META</h3>
       <p class="mecanica__texto">
-        El objetivo está arriba, pero el camino se construye en cada movimiento.
+        El <strong>objetivo está arriba</strong>, pero el camino se <strong>construye en cada movimiento</strong>.
       </p>
     </div>
  
@@ -233,7 +248,7 @@
  
   <section class="galeria fade-in" id="galeria">
 
-    <h2 class="galeria__titulo">Cada nivel,<br>es una nueva perspectiva</h2>
+    <h2 class="galeria__titulo">Cada nivel,<br>es una <strong>nueva perspectiva</strong></h2>
 
     <button class="galeria__btn galeria__btn--izq" id="galeria-izq" aria-label="Tira anterior">
       <span class="galeria__btn-circulo" id="btn-color-izq"></span>
@@ -311,24 +326,35 @@
   <hr class="divider">
 
   <section class="fundamento fade-in" id="fundamento">
-    <h2 class="fundamento__titulo">Fundamento</h2>
-
     
-      <div class="fundamento__sub-bloque">
-        <h4 class="fundamento__h4">Conceptos Escogidos</h4>
-        <p class="fundamento__texto">La columna vertebral de prácticamente cualquier juego de mesa es la exploración del tablero para cumplir con los objetivos planteados. PolkUp se diferencia al salir del plano bidimensional y traer a la mesa una estructura tridimensional que rota en cualquier dirección, mostrando de manera física y visual cómo el camino varía en cada momento. Junto a esto, las cartas que afectan la escalada son un elemento lúdico fundamental para transformar el trayecto hacia la cima en un recorrido tridimensional dinámico.</p>
-      </div>
-
-      <div class="fundamento__sub-bloque">
-        <h4 class="fundamento__h4">Reconceptualización</h4>
-        <p class="fundamento__texto">Esta experiencia experimental no es una réplica virtual 1:1 del juego de mesa, sino una abstracción de sus cualidades físicas traducidas a interacciones a través del código. El proyecto traslada los rasgos centrales del tablero físico —la tridimensionalidad constructiva, el recorrido del escalador, el riesgo del error y el reconocimiento de nodos cromáticos— hacia un entorno digital que exige atención y motricidad adaptativa. Aquí, el código no simula: traduce la tensión, el cálculo táctico y el riesgo lúdico en una interfaz de precisión cinemática.</p>
-        <ul class="fundamento__lista">
-          <li><strong>Tridimensionalidad y Recorrido:</strong> La navegación se desarrolla mediante una exploración continua tridimensional con nodos aleatorios en cada partida. El usuario está obligado a orbitar la cámara y rotar las piezas para descubrir y trazar el camino de la ascensión.</li>
-          <li><strong>Motricidad y Error ante la Anomalía:</strong> La resistencia y tensión de los distintos eventos físicos se digitalizaron para transmitir urgencia. El usuario debe aplicar una respuesta motriz directa a través de clics veloces y prestar atención para reconocer los nodos, recorriendo el espacio y evitando el colapso en la subida.</li>
-        </ul>
-      </div>
+    <div class="fundamento__bg">
+      <div class="fundamento__circulo fundamento__circulo--1"></div>
+      <div class="fundamento__circulo fundamento__circulo--2"></div>
+      <div class="fundamento__circulo fundamento__circulo--3"></div>
+      <div class="fundamento__circulo fundamento__circulo--4"></div>
     </div>
 
+    <div class="fundamento__contenido">
+      <h2 class="fundamento__titulo">Fundamento</h2>
+
+      <div class="fundamento__grid">
+        
+        <div class="fundamento__caja">
+          <h4 class="fundamento__h4">Conceptos Escogidos</h4>
+          <p class="fundamento__texto">La columna vertebral de prácticamente cualquier juego de mesa es la <strong>exploración del tablero</strong> para cumplir con los objetivos planteados. PolkUp se diferencia al salir del plano bidimensional y traer a la mesa una <strong>estructura tridimensional que rota en cualquier dirección</strong>, mostrando de manera física y visual cómo el camino varía en cada momento. Junto a esto, las cartas que afectan la escalada son un elemento lúdico fundamental para transformar el trayecto hacia la cima en un <strong>recorrido tridimensional dinámico</strong>.</p>
+        </div>
+
+        <div class="fundamento__caja">
+          <h4 class="fundamento__h4">Reconceptualización</h4>
+          <p class="fundamento__texto">Esta experiencia experimental <strong>no es una réplica virtual 1:1</strong> del juego de mesa, sino una <strong>abstracción de sus cualidades físicas</strong> traducidas a interacciones a través del código. El proyecto traslada los rasgos centrales del tablero físico —la tridimensionalidad constructiva, el recorrido del escalador, el riesgo del error y el reconocimiento de nodos cromáticos— hacia un <strong>entorno digital que exige atención y motricidad adaptativa</strong>. Aquí, el código no simula: traduce la tensión, el cálculo táctico y el riesgo lúdico en una <strong>interfaz de precisión cinemática</strong>.</p>
+          <ul class="fundamento__lista">
+            <li><strong>Tridimensionalidad y Recorrido:</strong> La navegación se desarrolla mediante una exploración continua tridimensional con nodos aleatorios en cada partida. El usuario está obligado a <strong>orbitar la cámara y rotar las piezas</strong> para descubrir y trazar el camino de la ascensión.</li>
+            <li><strong>Motricidad y Error:</strong> La resistencia y tensión de los distintos eventos físicos se digitalizaron para <strong>transmitir urgencia</strong>. El usuario debe aplicar una <strong>respuesta motriz directa</strong> a través de clics veloces y prestar atención para evitar el colapso.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
   </section>
 
   <hr class="divider">
@@ -364,14 +390,32 @@
 
   <hr class="divider divider--footer">
 
-  <script type="module" src="script.js"></script>
-
-  <!-- Cursor personalizado -->
   <div id="custom-cursor"></div>
 
   <script type="module" src="script.js"></script>
-</body>
-</html>
 
+  <footer class="footer">
+    <div class="footer__container">
+      
+      <div class="footer__left">
+        <p class="footer__text">
+          <strong>Sobre el proyecto:</strong> Landing page e interfaz expresiva digital sobre el juego PolkUp, desarrolladas en Visual Studio Code y GitHub. Para más detalles, visite la <a href="https://wiki.ead.pucv.cl/U3_Taller_IxD_-_Mateo_Mackay" class="footer__link" target="_blank" rel="noopener noreferrer">wiki del desarrollo web</a> o explore la <a href="https://wiki.ead.pucv.cl/PolkUp" class="footer__link" target="_blank" rel="noopener noreferrer">wiki del juego de mesa</a>.
+        </p>
+        <p class="footer__credits">
+          Estudiante: Mateo Mackay Ortiz<br>
+          Profesoras: Katherine Exss y Javiera Ruiz
+        </p>
+      </div>
+
+      <div class="footer__right">
+        <a href="https://wiki.ead.pucv.cl/Taller_de_Dise%C3%B1o_de_Interacci%C3%B3n_2026" class="footer__link-title" target="_blank" rel="noopener noreferrer">Taller de Diseño de Interacción 2026</a>
+        <div class="footer__logos">
+          <img src="assets/logo universidad.png" alt="Logo PUCV" class="footer__logo">
+          <img src="assets/logo ead.png" alt="Logo ead" class="footer__logo">
+        </div>
+      </div>
+
+    </div>
+  </footer>
 </body>
 </html>

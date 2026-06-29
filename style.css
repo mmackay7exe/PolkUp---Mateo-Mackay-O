@@ -21,7 +21,7 @@ html {
   background: #fcfcfb;
   color: #000000;
   scroll-behavior: smooth;
-  scroll-padding-top: 100px; /* Evita que el menú tape el título al scrollear */
+  scroll-padding-top: 100px;
 }
 
 body {
@@ -61,20 +61,19 @@ img {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100px; /* Definimos una altura fija para la barra */
-  padding: 0 50px; /* Padding lateral */
+  height: 100px;
+  padding: 0 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 1000; /* Asegura que esté siempre por encima de todo */
-  background-color: #fcfcfb; /* Fondo blanco */
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Sombrita sutil para separar del scroll */
+  z-index: 1000;
+  background-color: #fcfcfb;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-/* Ajuste para el logo y menú */
 .header__logo {
   display: block;
-  width: 40px; /* Un poco más pequeño para que entre bien en los 100px de alto */
+  width: 40px;
   height: 40px;
   background: #000000;
   border-radius: 50%;
@@ -99,7 +98,6 @@ img {
   gap: 20px;
 }
 
-/* Crea la línea | automáticamente entre los links */
 .header__menu li:not(:last-child)::after {
   content: "|";
   color: #000000;
@@ -128,7 +126,7 @@ img {
 .hero {
   position: relative;
   width: 100%;
-  height: 100vh; /* Obliga a que solo se vea esta sección al inicio */
+  height: 100vh;
   display: flex;
   align-items: center; 
   justify-content: center; 
@@ -136,18 +134,15 @@ img {
   background: #fcfcfb;
 }
 
-/* El contenedor que bloquea la vista perfecta */
 .hero__container {
   position: relative;
   width: 1440px;
   height: 680px;
   flex-shrink: 0;
-  /* La magia: Escala dinámicamente según la ventana */
   transform: scale(min(calc(100vw / 1440), calc(100vh / 680)));
   transform-origin: center center;
 }
 
-/* Botón de reseteo de cámara (esquina superior derecha) */
 .hero__reset-btn {
   position: absolute;
   top: 70px;
@@ -173,14 +168,13 @@ img {
 }
 
 @keyframes ciclo-arcoiris {
-  0%   { background-color: #ff0000; } /* Rojo */
-  25%  { background-color: #39ca04; } /* Verde */
-  50%  { background-color: #0900ff; } /* Azul */
-  75%  { background-color: #f4e434; } /* Amarillo */
-  100% { background-color: #ff0000; } /* Vuelve al Rojo */
+  0%   { background-color: #ff0000; }
+  25%  { background-color: #39ca04; }
+  50%  { background-color: #0900ff; }
+  75%  { background-color: #f4e434; }
+  100% { background-color: #ff0000; }
 }
 
-/* Título PolkUp */
 .hero__title {
   position: absolute;
   top: 85px;
@@ -192,7 +186,6 @@ img {
   color: #000000;
 }
 
-/* Bloque de texto izquierdo */
 .hero__text-block {
   position: absolute;
   top: 320px;
@@ -213,18 +206,16 @@ img {
   line-height: 1.5;
 }
 
-/* Modelo 3D canvas en el hero */
 .hero__canvas {
   position: absolute;
   top: -346px;
   left: 300px;
   width: 1514px;
   height: 1384px;
-  pointer-events: auto; /* Mantiene tu página a salvo de bloqueos de scroll */
+  pointer-events: auto;
   display: block;
 }
 
-/* Título y texto ocultos hasta que termina la intro */
 .hero__title--oculto,
 .hero__text-block--oculto {
   opacity: 0;
@@ -237,7 +228,6 @@ img {
   transform: translateY(0);
 }
 
-/* ── Pantalla de intro bloqueante ─────────────────────────── */
 .intro {
   position: fixed;
   top: 0;
@@ -277,7 +267,6 @@ img {
   transition: opacity 0.8s ease;
 }
 
-/* Header oculto durante la intro */
 .header--oculto {
   opacity: 0;
   pointer-events: none;
@@ -290,13 +279,69 @@ img {
 
 
 /* ============================================================
-   SECCIÓN 2: TABLERO
+   SECCIÓN 2: TABLERO (Intro)
    ============================================================ */
 .tablero {
+  position: relative;
   padding: 40px 32px 20px;
+  clip-path: inset(0 -100vw 0 -100vw);
+  background-color: #fcfcfb;
 }
- 
-/* Frase en dos columnas */
+
+/* Protege el z-index de los elementos por encima del fondo */
+.tablero > div:not(.tablero__bg) {
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Animación de Fondo Intro --- */
+.tablero__bg {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.tablero__circulo {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+  animation: flotar 22s infinite ease-in-out alternate;
+}
+
+.tablero__circulo--1 {
+  width: 450px; height: 450px;
+  background-color: #f4e434; /* Amarillo (Cambiado por Azul) */
+  top: -50px; right: -50px;
+  animation-duration: 24s;
+}
+
+.tablero__circulo--2 {
+  width: 300px; height: 300px;
+  background-color: #ff0000; /* Rojo */
+  bottom: 20%; left: -80px;
+  animation-delay: -4s;
+  animation-duration: 18s;
+}
+
+.tablero__circulo--3 {
+  width: 200px; height: 200px;
+  background-color: #0900ff; /* Azul (Cambiado por Amarillo) */
+  top: 40%; left: 30%;
+  animation-delay: -8s;
+  animation-duration: 20s;
+}
+
+.tablero__circulo--4 {
+  width: 350px; height: 350px;
+  background-color: #00853F; /* Verde */
+  bottom: -50px; right: 20%;
+  animation-delay: -12s;
+  animation-duration: 26s;
+}
+
+/* --- Textos y Cajas Intro --- */
 .tablero__frase {
   display: flex;
   justify-content: space-between;
@@ -317,7 +362,6 @@ img {
   text-align: right;
 }
  
-/* Imagen del tablero (3 capas) */
 .tablero__imagen-wrap {
   position: relative;
   width: 100%;
@@ -334,12 +378,10 @@ img {
   object-fit: cover;
 }
  
-/* Las 3 capas se superponen; la primera es el fondo de color (agrandar para que quede bien el parallax) */
 .tablero__img--1 { z-index: 3; }
 .tablero__img--2 { z-index: 2; }
 .tablero__img--3 { z-index: 1; }
  
-/* Leyenda inferior */
 .tablero__leyenda {
   display: flex;
   align-items: center;
@@ -367,7 +409,6 @@ img {
   object-fit: contain;
 }
  
-/* Subtítulo + cuerpo de texto al pie del tablero */
 .tablero__texto-bloque {
   padding: 60px 0 40px;
 }
@@ -379,9 +420,42 @@ img {
   margin-bottom: 32px;
   max-width: 820px;
 }
- 
+
+/* Grilla a dos columnas para la Intro */
+.tablero__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tablero__caja {
+  background: #ffffff;
+  border: 3px solid #000000;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  box-shadow: 12px 12px 0px rgba(0,0,0,1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tablero__caja:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 16px 16px 0px rgba(0,0,0,1);
+}
+
+.tablero__texto {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 0;
+}
+
 .tablero__cuerpo {
-  font-size: 23px;
+  font-size: 20px;
   font-weight: 400;
   line-height: 1.6;
   max-width: 100%;
@@ -393,7 +467,6 @@ img {
   flex: 1;
 }
 
-/* Tabla Objetivo del juego */
 .tablero__tabla-wrap {
   margin-top: 40px;
   overflow-x: auto;
@@ -449,7 +522,6 @@ img {
   gap: 0;
 }
  
-/* Separador vertical entre mecánicas */
 .mecanica__separador {
   width: 1px;
   background: #000000;
@@ -457,7 +529,6 @@ img {
   flex-shrink: 0;
 }
  
-/* Cada mecánica */
 .mecanica {
   flex: 1;
   display: flex;
@@ -474,7 +545,6 @@ img {
   padding-right: 0;
 }
  
-/* Imagen de la mecánica */
 .mecanica__imagen-wrap {
   position: relative;
   width: 100%;
@@ -492,23 +562,18 @@ img {
   transition: transform 0.3s ease, opacity 0.2s ease;
 }
  
-/* Título EJE / GIRO / etc. */
 .mecanica__titulo {
   font-size: 35px;
   font-weight: 600;
   margin-bottom: 16px;
 }
  
-/* Descripción */
 .mecanica__texto {
   font-size: 23px;
   font-weight: 400;
   line-height: 1.4;
 }
  
-/* ── Animaciones Hover mecánicas ──────────────────────────────────────── */
- 
-/* EJE — péndulo */
 #mecanica-eje .mecanica__imagen {
   transform-origin: top center;
   transition: transform 0.0s;
@@ -523,7 +588,6 @@ img {
   100% { transform: rotate(0deg); }
 }
  
-/* GIRO — rotación 360° */
 #mecanica-giro .mecanica__imagen-wrap:hover .mecanica__imagen {
   animation: girar360 1s linear infinite;
 }
@@ -532,17 +596,15 @@ img {
   to   { transform: rotate(360deg); }
 }
  
-/* NIVELES — Contenedor relativo para evitar saltos */
 #mecanica-niveles .mecanica__imagen-wrap {
   position: relative;
   width: 100%;
-  height: 240px; /* Forzamos un alto fijo al contenedor para que no se mueva */
+  height: 240px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Base común para ambas imágenes */
 #mecanica-niveles .mecanica__imagen-wrap .mecanica__imagen {
   position: absolute;
   top: 50%;
@@ -553,34 +615,27 @@ img {
   transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
-/* Imagen Estática: Centrada normal */
 #mecanica-niveles .mecanica__imagen--static {
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
   z-index: 2;
 }
 
-/* GIF Animado; Compensacion de la diferencia de tamaño del archivo */
 #mecanica-niveles .mecanica__imagen--hover {
   transform: translate(-50%, -50%) scale(0.40); 
   opacity: 0;
   z-index: 1;
 }
 
-/* ── COMPORTAMIENTO HOVER ── */
-
-/* Desaparece la estática */
 #mecanica-niveles .mecanica__imagen-wrap:hover .mecanica__imagen--static {
   opacity: 0;
 }
 
-/* Aparece el GIF manteniendo su escala de compensación */
 #mecanica-niveles .mecanica__imagen-wrap:hover .mecanica__imagen--hover {
   opacity: 1;
-  transform: translate(-50%, -50%) scale(0.85); /* Debe tener el mismo scale de arriba */
+  transform: translate(-50%, -50%) scale(0.85);
 }
  
-/* DECISIÓN — crece y rota en loop */
 #mecanica-decision .mecanica__imagen-wrap:hover .mecanica__imagen {
   animation: crecer-rotar 1.5s ease-in-out infinite;
 }
@@ -590,7 +645,6 @@ img {
   100% { transform: scale(1)    rotate(360deg); }
 }
  
-/* META — sube levemente */
 #mecanica-meta .mecanica__imagen-wrap:hover .mecanica__imagen {
   animation: subir 0.8s ease-in-out infinite alternate;
 }
@@ -664,21 +718,9 @@ img {
   display: block;
 }
 
-.galeria__foto--placeholder {
-  background: #f0f0f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 500;
-  color: #aaaaaa;
-  font-family: 'Manrope', sans-serif;
-}
-
-/* Botones laterales — centrados verticalmente respecto al contenedor */
 .galeria__btn {
   position: absolute;
-  top: calc(60px + 338px); /* titulo + mitad de la galeria aprox */
+  top: calc(60px + 338px);
   transform: translateY(-50%);
   z-index: 10;
   cursor: pointer;
@@ -706,7 +748,6 @@ img {
   transform: scale(1.1);
 }
 
-/* Indicadores */
 .galeria__indicadores {
   display: flex;
   gap: 12px;
@@ -730,47 +771,117 @@ img {
 }
 
 /* ============================================================
-   SECCIÓN 5: FUNDAMENTO
+   SECCIÓN 5: FUNDAMENTO (Estilo Bauhaus/Brutalista Centrado)
    ============================================================ */
 .fundamento {
-  padding: 80px 32px;
-  min-height: 300px;
+  position: relative;
+  padding: 100px 72px;
+  min-height: 500px;
+  clip-path: inset(0 -100vw 0 -100vw);
+  background-color: #fcfcfb;
+}
+
+/* --- Animación de Fondo Sólida y Equilibrada --- */
+.fundamento__bg {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.fundamento__circulo {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+  animation: flotar 22s infinite ease-in-out alternate;
+}
+
+.fundamento__circulo--1 {
+  width: 440px; height: 450px;
+  background-color: #f4e434; /* Amarillo (Cambiado por Azul) */
+  top: -80px; left: -80px;
+  animation-duration: 20s;
+}
+
+.fundamento__circulo--2 {
+  width: 360px; height: 360px;
+  background-color: #ff0000; /* Rojo */
+  bottom: -60px; right: 4%;
+  animation-delay: -5s;
+  animation-duration: 24s;
+}
+
+/* Círculo Amarillo ajustado a la esquina superior derecha */
+.fundamento__circulo--3 {
+  width: 260px; height: 250px;
+  background-color: #0900ff; /* Azul (Cambiado por Amarillo) */
+  top: -40px; right: 8%; left: auto;
+  animation-delay: -10s;
+  animation-duration: 18s;
+}
+
+.fundamento__circulo--4 {
+  width: 320px; height: 320px;
+  background-color: #00853F; /* Verde */
+  bottom: 25%; left: -50px;
+  animation-delay: -14s;
+  animation-duration: 26s;
+}
+
+@keyframes flotar {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(50px, -30px) scale(1.08); }
+  66%  { transform: translate(-30px, 50px) scale(0.96); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+/* --- Contenido Centrado --- */
+.fundamento__contenido {
+  position: relative;
+  z-index: 1;
 }
 
 .fundamento__titulo {
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 1.2;
-  max-width: 500px;
-}
-
-.fundamento__bloque {
-  margin-top: 60px;
-  display: flex;
-  flex-direction: column;
-  gap: 48px;
-}
-
-.fundamento__subtitulo {
-  font-size: 28px;
+  font-size: 50px;
   font-weight: 700;
   line-height: 1.2;
-  text-transform: uppercase;
-  letter-spacing: 0.01em;
-  margin-bottom: 8px;
+  margin-bottom: 60px;
 }
 
-.fundamento__sub-bloque {
+.fundamento__grid {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 40px;
+  max-width: 1000px;
+  margin: 0 auto; /* Centra las cajas horizontalmente dentro de la sección */
+  align-items: center;
+}
+
+/* --- Las Cajas --- */
+.fundamento__caja {
+  background: #ffffff;
+  border: 3px solid #000000;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 12px 12px 0px rgba(0,0,0,1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%; /* Asegura consistencia y simetría entre bloques */
+}
+
+.fundamento__caja:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 16px 16px 0px rgba(0,0,0,1);
 }
 
 .fundamento__h4 {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 26px;
+  font-weight: 800;
   line-height: 1.2;
   margin: 0;
+  text-transform: uppercase;
 }
 
 .fundamento__texto {
@@ -786,7 +897,7 @@ img {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .fundamento__lista li {
@@ -801,7 +912,8 @@ img {
   content: "·";
   position: absolute;
   left: 0;
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 24px;
 }
 
 /* ============================================================
@@ -816,7 +928,6 @@ img {
   overflow: hidden;
 }
 
-/* Dibujo del escalador (izquierda) */
 .escalador__dibujo {
   position: relative;
   flex: 0 0 750px;
@@ -842,7 +953,6 @@ img {
   height: 257px;
 }
 
-/* ── Escalador interactivo ── */
 .escalador__dibujo--interactivo {
   cursor: pointer;
 }
@@ -858,7 +968,6 @@ img {
   object-fit: fill;
 }
 
-/* Transición de texto del escalador */
 .escalador__titulo {
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
@@ -868,7 +977,6 @@ img {
   transform: translateY(10px);
 }
 
-/* Contenido derecho */
 .escalador__contenido {
   flex: 1;
   display: flex;
@@ -878,7 +986,6 @@ img {
   padding-bottom: 80px;
 }
 
-/* Título grande */
 .escalador__titulo {
   font-size: 60px;
   font-weight: 700;
@@ -888,7 +995,6 @@ img {
   margin-top: -100px;
 }
 
-/* ── Botón CTA ── */
 #cta-comenzar {
   opacity: 0;
   pointer-events: none;
@@ -921,7 +1027,6 @@ img {
   transform: scale(1.04);
 }
 
-/* Círculo sólido de color */
 .cta-btn__circulo {
   width: 125px;
   height: 125px;
@@ -938,7 +1043,6 @@ img {
   75%  { background: #f4e434; }
 }
 
-/* Texto del botón */
 .cta-btn__texto {
   font-size: 42px;
   font-weight: 700;
@@ -956,7 +1060,6 @@ img {
   75%  { color: #f4e434; }
 }
 
-/* ── Transición al hacer click ──────────────────── */
 .cta-btn.is-active .cta-btn__circulo {
   background: #000000;
   animation: none;
@@ -968,19 +1071,12 @@ img {
   animation: none;
 }
 
-/* ── Animación arcoíris del título PolkUp ─────────────────── */
-
-/*
-  Cada letra pasa por: negro → COLOR → negro
- 
-*/
 @keyframes letra-flash {
   0%        { color: #000000; }
   1%        { color: var(--color-letra); }
   25%, 100% { color: #000000; }
 }
 
-/* Elevación suave — sube rápido, baja despacio, independiente del color */
 @keyframes letra-ola {
   0%   { transform: translateY(0); }
   15%  { transform: translateY(-18px); }
@@ -993,7 +1089,6 @@ img {
   color: inherit;
 }
 
-/* Dos animaciones en paralelo: color (steps) + elevación (ease) */
 #hero-title.arcoiris .hero__title-letra {
   animation-name: letra-flash, letra-ola;
   animation-duration: 0.9s, 0.9s;
@@ -1001,7 +1096,6 @@ img {
   animation-fill-mode: forwards, forwards;
 }
 
-/* ── Transición al hacer click ──────────────────── */
 .cta-btn.is-active .cta-btn__circulo-outer {
   background: #000000;
   transition: background 0.4s ease;
@@ -1015,7 +1109,6 @@ img {
    UTILIDADES
    ============================================================ */
 
-/* Clase para animaciones de scroll (se agrego en el JS) */
 .fade-in {
   opacity: 0;
   transform: translateY(30px);
@@ -1027,7 +1120,6 @@ img {
   transform: translateY(0);
 }
 
-/* Reducir movimiento si el usuario lo prefiere */
 @media (prefers-reduced-motion: reduce) {
   .fade-in {
     transition: none;
@@ -1038,7 +1130,6 @@ img {
     transition: none;
   }
 }
-/* Header fijo  */
 .header {
   position: fixed;
   top: 0;
@@ -1082,7 +1173,6 @@ img {
   text-transform: uppercase;
 }
 
-/* ── Botón "Iniciar el ascenso" en el hero (esquina inferior derecha) ── */
 .hero__ascenso-btn {
   position: absolute;
   bottom: 50px;
@@ -1107,4 +1197,164 @@ img {
 .hero__ascenso-btn:hover {
   background: #000000;
   color: #fcfcfb;
+}
+
+@keyframes slideUpFade {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-title, 
+.hero-subtitle, 
+.hero-text, 
+.btn-primary {
+    opacity: 0; 
+    animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-title {
+    animation-delay: 0.1s;
+}
+.hero-subtitle {
+    animation-delay: 0.3s;
+}
+.hero-text {
+    animation-delay: 0.5s;
+}
+.btn-primary {
+    animation-delay: 0.7s;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--bg-color);
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(218, 37, 29, 0.2);
+}
+
+/* ============================================================
+   FOOTER 
+   ============================================================ */
+.footer {
+  background-color: #000000;
+  color: #ffffff;
+  font-family: 'Manrope', sans-serif;
+  border-top: 1px solid #1a1a1a;
+  
+  /* 1. Mayor espacio blanco de separación con la última sección */
+  margin-top: 140px; 
+  padding: 45px 0; /* Relleno interno superior e inferior delgado */
+
+  /* 2. Truco de ruptura para lograr el ancho completo (100vw) */
+  width: 100vw;
+  position: relative;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  box-sizing: border-box;
+}
+
+.footer__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  
+  /* Mantener el contenido alineado a la grilla de tu página (max 1440px) */
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 50px; 
+  box-sizing: border-box;
+}
+
+.footer__left {
+  flex: 1;
+  max-width: 750px;
+}
+
+.footer__text {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.footer__text strong {
+  color: #ffffff;
+}
+
+.footer__credits {
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.footer__link {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 0.3s ease;
+}
+
+.footer__link:hover {
+  opacity: 0.6;
+}
+
+.footer__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 20px;
+  text-align: right;
+}
+
+.footer__link-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.3s ease;
+}
+
+.footer__link-title:hover {
+  opacity: 0.6;
+}
+
+.footer__logos {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.footer__logo {
+  height: 45px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* --- Responsividad --- */
+@media (max-width: 900px) {
+  .footer {
+    margin-top: 80px; /* Un poco menos en pantallas pequeñas */
+  }
+
+  .footer__container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+  }
+  
+  .footer__right {
+    align-items: flex-start;
+    text-align: left;
+  }
 }

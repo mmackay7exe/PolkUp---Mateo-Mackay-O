@@ -2,6 +2,116 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+// ==========================================
+// --- GESTOR DE AUDIO ---
+// ==========================================
+const AudioManager = {
+    sounds: {},
+    audioContextResumed: false,
+    init: function() {
+        const basePath = './assets/sonidos/';
+        
+        // Ambientes reducidos un 45% par que no saturen el audio general, y se ajusta el volumen de cada uno según su importancia
+        const audioFiles = [
+            { id: 'ambiente', src: 'ambiente_base_exp.ogg', loop: true, vol: 0.055 }, 
+            { id: 'caida', src: 'caida.ogg', vol: 0.56 },
+            { id: 'cumbre', src: 'cumbre.ogg', vol: 0.63 },
+            { id: 'eclipse_off', src: 'efectooff_eclipse.ogg', vol: 0.56 },
+            { id: 'fondo_gravedad', src: 'fondo_anomalia_gravitacional.ogg', loop: true, vol: 0.19 }, 
+            { id: 'fondo_vortice', src: 'fondo_anomalia_vortice.ogg', loop: true, vol: 0.19 }, 
+            { id: 'tension', src: 'tension_estructural_5s.ogg', vol: 0.63 },
+            { id: 'ticking', src: 'ticking.ogg', loop: true, vol: 0.56 },
+            { id: 'error', src: 'error_dentro_eventos.ogg', vol: 0.8 }, 
+            { id: 'seleccion_evento', src: 'seleccion_dentro_eventos.ogg', vol: 0.8 }, 
+            { id: 'event_loss', src: 'eventloss.ogg', vol: 0.56 },
+            { id: 'seleccion_nodo', src: 'seleccion_nodos.ogg', vol: 0.9 }, 
+            { id: 'giro1', src: 'giro_torre1.ogg', vol: 0.3 },
+            { id: 'giro2', src: 'giro_torre2.ogg', vol: 0.3 },
+            { id: 'intro_evento', src: 'intro_eventos.ogg', vol: 0.56 },
+            { id: 'swoosh', src: 'swoosh.ogg', vol: 0.2 },
+            { id: 'ruleta', src: 'ruleta.ogg', vol: 0.3 }, 
+            { id: 'color_escogido', src: 'color_escogido.ogg', vol: 0.5 } 
+        ];
+
+        audioFiles.forEach(file => {
+            const audio = new Audio(basePath + file.src);
+            audio.loop = file.loop || false;
+            audio.volume = file.vol || 1.0;
+            audio.dataset.baseVolume = file.vol || 1.0; 
+            this.sounds[file.id] = audio;
+        });
+    },
+    play: function(id) {
+        if (this.sounds[id]) {
+            // El swoosh se clonó para que puedan sonar múltiples veces rápidas superpuestas
+            if (id === 'swoosh') {
+                const clone = this.sounds[id].cloneNode();
+                clone.volume = parseFloat(this.sounds[id].dataset.baseVolume);
+                clone.play().catch(e => console.warn(e));
+            } else {
+                this.sounds[id].currentTime = 0;
+                this.sounds[id].volume = parseFloat(this.sounds[id].dataset.baseVolume);
+                this.sounds[id].play().catch(e => console.warn("Audio bloqueado por el navegador", e));
+            }
+        }
+    },
+    stop: function(id) {
+        if (this.sounds[id]) {
+            this.sounds[id].pause();
+            this.sounds[id].currentTime = 0;
+        }
+    },
+    playRandom: function(idArray) {
+        const id = idArray[Math.floor(Math.random() * idArray.length)];
+        this.play(id);
+    },
+    fadeOut: function(id, duration = 1500) {
+        if (!this.sounds[id] || this.sounds[id].paused) return;
+        const audio = this.sounds[id];
+        const startVol = audio.volume;
+        const steps = 30;
+        const stepTime = duration / steps;
+        let currentStep = 0;
+
+        const fadeInterval = setInterval(() => {
+            currentStep++;
+            let newVol = startVol * (1 - (currentStep / steps));
+            if (newVol < 0) newVol = 0;
+            audio.volume = newVol;
+
+            if (currentStep >= steps) {
+                clearInterval(fadeInterval);
+                audio.pause();
+                audio.currentTime = 0;
+                audio.volume = parseFloat(audio.dataset.baseVolume); 
+            }
+        }, stepTime);
+    }
+};
+
+AudioManager.init();
+// ==========================================
+
+// --- PANTALLA DE CARGA / INTERACCIÓN INICIAL ---
+// Esto se coloco para solucionar el bloqueo de audio del navegador forzando un primer clic
+const startOverlay = document.createElement('div');
+startOverlay.id = 'start-overlay';
+Object.assign(startOverlay.style, {
+    position: 'absolute', top: '0', left: '0', width: '100vw', height: '100vh',
+    backgroundColor: '#ffffff', zIndex: '9999', display: 'flex',
+    justifyContent: 'center', alignItems: 'center',
+    fontFamily: "'Manrope', sans-serif", fontSize: '20px', letterSpacing: '4px',
+    fontWeight: '800', cursor: 'wait', transition: 'opacity 0.8s ease',
+    color: '#111111'
+});
+startOverlay.innerHTML = '<span style="animation: pulse 1.5s infinite">CARGANDO EXPERIENCIA...</span>';
+document.body.appendChild(startOverlay);
+
+const stylePulse = document.createElement('style');
+stylePulse.innerHTML = `@keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }`;
+document.head.appendChild(stylePulse);
+// -----------------------------------------------
+
 const gamePalette = [
     0xDA251D, // Rojo
     0x00539B, // Azul
@@ -22,10 +132,10 @@ let isEclipseMode = false;
 let isTensionMode = false;
 let tensionClicks = 0;
 let tensionTarget = 16; 
-let tensionTimeLeft = 3.0;
+let tensionTimeLeft = 5.0; 
 let tensionInterval = null;
 
-// TORBELLINO DE NODOS (EL VACÍO)
+// TORBELLINO DE NODOS
 let isTorbellinoMode = false;
 let torbellinoGroup = new THREE.Group();
 let torbellinoNodes = []; 
@@ -34,11 +144,17 @@ let torbellinoFoundCount = 0;
 let torbellinoMemorizing = false; 
 let torbellinoSlowed = false; 
 let torbellinoTimer = null;
+let torbellinoErrors = 0;
+const TORBELLINO_MAX_ERRORS = 3;
 
 // GRAVEDAD CERO
 let isZeroGravity = false;
+let gravedadTimerInterval = null;
+let gravedadTimeLeft = 20.0;
+const GRAVEDAD_TIME_LIMIT = 20.0;
+let isTickingGravedad = false; 
 
-// --- POOL DE EVENTOS Y PROBABILIDADES ---
+// --- POOL DE EVENTOS ---
 let eventPool = [
     { id: 'tension', prob: 0.12, fired: false },
     { id: 'torbellino', prob: 0.12, fired: false },
@@ -56,7 +172,6 @@ const colorTarget = document.getElementById('color-target');
 const txtTargetLabel = document.getElementById('target-label');
 const levelDisplay = document.getElementById('level-display');
 
-// Elementos de Interfaz Nuevos
 const btnReglas = document.getElementById('btn-reglas');
 const panelReglas = document.getElementById('panel-reglas');
 const btnCerrarReglas = document.getElementById('btn-cerrar-reglas');
@@ -64,11 +179,9 @@ const btnVolver = document.getElementById('btn-volver');
 const btnLeft = document.getElementById('btn-left');
 const btnRight = document.getElementById('btn-right');
 
-// Elementos de Victoria
 const winTitle = document.getElementById('win-title');
 const btnRestart = document.getElementById('btn-restart');
 
-// Elementos de Eventos
 const eclipseOverlay = document.getElementById('eclipse-overlay');
 const btnEclipseStart = document.getElementById('btn-eclipse-start');
 
@@ -85,7 +198,6 @@ const torbellinoDotsContainer = document.getElementById('torbellino-dots');
 const gravedadOverlay = document.getElementById('gravedad-overlay'); 
 const btnGravedadStart = document.getElementById('btn-gravedad-start');
 
-// SEGURO DOM: Evitar clics fantasmas iniciales
 if(eclipseOverlay) eclipseOverlay.style.pointerEvents = 'none';
 if(gravedadOverlay) gravedadOverlay.style.pointerEvents = 'none';
 if(torbellinoOverlay) torbellinoOverlay.style.pointerEvents = 'none';
@@ -109,11 +221,9 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 
-// GRUPO DEL TORBELLINO
 scene.add(torbellinoGroup);
 torbellinoGroup.visible = false;
 
-// ILUMINACIÓN VOLUMÉTRICA
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); 
 scene.add(ambientLight);
 
@@ -129,11 +239,9 @@ const dirLightBack = new THREE.DirectionalLight(0xffffff, 0.4);
 dirLightBack.position.set(-20, 20, -20);
 scene.add(dirLightBack);
 
-// LINTERNA PARA EL ECLIPSE
 const flashlight = new THREE.PointLight(0xffffff, 0, 4, 2); 
 scene.add(flashlight);
 
-// --- MARCADOR FÍSICO ---
 const markerGeo = new THREE.ConeGeometry(0.5, 0.5, 3); 
 markerGeo.rotateX(-Math.PI / 2); 
 const markerMat = new THREE.MeshStandardMaterial({ 
@@ -231,7 +339,19 @@ loader.load('./assets/Polkup3d.glb', (gltf) => {
         });
     });
 
-    iniciarAscension();
+    startOverlay.style.cursor = 'pointer';
+    startOverlay.innerHTML = '<span style="animation: pulse 1.5s infinite">HAZ CLIC PARA COMENZAR</span>';
+    
+    startOverlay.addEventListener('click', () => {
+        if (!AudioManager.audioContextResumed) {
+            AudioManager.audioContextResumed = true;
+            AudioManager.play('ambiente');
+        }
+        startOverlay.style.opacity = '0';
+        setTimeout(() => startOverlay.remove(), 800);
+        
+        iniciarAscension(); 
+    });
 
 }, undefined, (error) => console.error("Error cargando el modelo:", error));
 
@@ -247,7 +367,8 @@ function iniciarAscension() {
     endEclipse(); 
     endTension(true); 
     endTorbellino_reset(); 
-    endZeroGravityForce(); 
+    endZeroGravityForce();
+    stopGravedadTimer(); 
 
     eventPool.forEach(e => e.fired = false);
 
@@ -256,7 +377,6 @@ function iniciarAscension() {
     if (winTitle) winTitle.classList.add('hidden-fade');
     if (btnRestart) btnRestart.classList.add('hidden-fade');
     
-    // Ocultar elementos visuales en la intro (Añadido levelDisplay para que nazca oculto)
     if(btnReglas) btnReglas.classList.add('fade-hidden');
     if(btnVolver) btnVolver.classList.add('fade-hidden');
     if(btnLeft) btnLeft.classList.add('fade-hidden');
@@ -289,7 +409,7 @@ function iniciarAscension() {
         });
     });
 
-    actualizarUI(); // Configura el nivel 0 / 8, pero se mantiene oculto por la clase fade-hidden
+    actualizarUI(); 
 
     const topY = levels[levels.length - 1].yRef;
     const bottomY = levels[0].yRef;
@@ -298,21 +418,13 @@ function iniciarAscension() {
     controls.update();
 
     gsap.to(camera.position, {
-        x: 0,
-        y: topY + 20,
-        z: 75,
-        duration: 2.8,
-        delay: 0.8,
-        ease: "power2.inOut",
+        x: 0, y: topY + 20, z: 75,
+        duration: 2.8, delay: 0.8, ease: "power2.inOut",
         onUpdate: () => controls.update()
     });
     gsap.to(controls.target, {
-        x: 0,
-        y: topY * 0.6,
-        z: 0,
-        duration: 2.8,
-        delay: 0.8,
-        ease: "power2.inOut",
+        x: 0, y: topY * 0.6, z: 0,
+        duration: 2.8, delay: 0.8, ease: "power2.inOut",
         onComplete: iniciarRotacion360
     });
 }
@@ -336,6 +448,7 @@ function iniciarRotacion360() {
         const flyDistance = 35; 
 
         gsap.delayedCall(delay, () => {
+            AudioManager.play('swoosh'); 
             gsap.to(lvl.group.position, {
                 y: lvl.group.position.y + flyDistance,
                 duration: flyDuration,
@@ -349,16 +462,11 @@ function iniciarRotacion360() {
     });
 
     gsap.to(orbitState, {
-        targetY: bottomY,
-        duration: orbitDuration * 0.55,
-        delay: orbitDuration * 0.45,
-        ease: "power2.inOut"
+        targetY: bottomY, duration: orbitDuration * 0.55, delay: orbitDuration * 0.45, ease: "power2.inOut"
     });
 
     gsap.to(orbitState, {
-        angle: startAngle + Math.PI * 2,
-        duration: orbitDuration,
-        ease: "power1.inOut",
+        angle: startAngle + Math.PI * 2, duration: orbitDuration, ease: "power1.inOut",
         onUpdate: () => {
             const progress = (orbitState.angle - startAngle) / (Math.PI * 2);
             camera.position.x = Math.sin(orbitState.angle) * orbitRadius;
@@ -377,7 +485,6 @@ function iniciarRotacion360() {
                 x: 0, y: bottomY, z: 0,
                 duration: 1.5, ease: "power2.inOut",
                 onComplete: () => {
-                    // Aparecen los textos y botones suavemente al terminar
                     if(btnReglas) btnReglas.classList.remove('fade-hidden');
                     if(btnVolver) btnVolver.classList.remove('fade-hidden');
                     if(btnLeft) btnLeft.classList.remove('fade-hidden');
@@ -468,9 +575,7 @@ function animarDescensoCumbre() {
     let smoothTargetY = startHeight;
 
     gsap.to(state, {
-        progress: 1.0,
-        duration: totalDuration,
-        ease: "power1.inOut",
+        progress: 1.0, duration: totalDuration, ease: "power1.inOut",
         onUpdate: () => {
             const idx = Math.min(N_SAMPLES - 1, Math.floor(state.progress * (N_SAMPLES - 1)));
             const frac = state.progress * (N_SAMPLES - 1) - idx;
@@ -498,57 +603,33 @@ function animarDescensoCumbre() {
         onComplete: () => {
             const finalAngle = smoothAngle;
             gsap.to(camera.position, {
-                x: Math.sin(finalAngle) * endRadius,
-                y: endHeight + towerHeight * 0.12,
-                z: Math.cos(finalAngle) * endRadius,
-                duration: 1.8,
-                ease: "power2.inOut",
-                onUpdate: () => controls.update()
+                x: Math.sin(finalAngle) * endRadius, y: endHeight + towerHeight * 0.12, z: Math.cos(finalAngle) * endRadius,
+                duration: 1.8, ease: "power2.inOut", onUpdate: () => controls.update()
             });
-            gsap.to(controls.target, {
-                x: 0,
-                y: endHeight,
-                z: 0,
-                duration: 1.8,
-                ease: "power2.inOut",
-                onComplete: () => {
-                    controls.enableRotate = true;
-                    controls.enablePan    = false;
-                    controls.enableZoom   = true;
-                    controls.target.set(0, endHeight, 0);
-                    controls.update();
+            AudioManager.play('swoosh'); 
 
-                    // LÓGICA DE VICTORIA Y CONFETI (Reducido a 2 segundos)
+            gsap.to(controls.target, {
+                x: 0, y: endHeight, z: 0,
+                duration: 1.8, ease: "power2.inOut",
+                onComplete: () => {
+                    controls.enableRotate = true; controls.enablePan = false; controls.enableZoom = true;
+                    controls.target.set(0, endHeight, 0); controls.update();
+
                     if (typeof confetti === 'function') {
                         const duration = 2000;
                         const end = Date.now() + duration;
 
                         (function frame() {
-                            confetti({
-                                particleCount: 5,
-                                angle: 60,
-                                spread: 55,
-                                origin: { x: 0, y: 0.8 },
-                                colors: ['#DA251D', '#00539B', '#FFC72C', '#00853F'],
-                                zIndex: 2000
-                            });
-                            confetti({
-                                particleCount: 5,
-                                angle: 120,
-                                spread: 55,
-                                origin: { x: 1, y: 0.8 },
-                                colors: ['#DA251D', '#00539B', '#FFC72C', '#00853F'],
-                                zIndex: 2000
-                            });
-
-                            if (Date.now() < end) {
-                                requestAnimationFrame(frame);
-                            }
+                            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#DA251D', '#00539B', '#FFC72C', '#00853F'], zIndex: 2000 });
+                            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#DA251D', '#00539B', '#FFC72C', '#00853F'], zIndex: 2000 });
+                            if (Date.now() < end) requestAnimationFrame(frame);
                         }());
                     }
 
                     if(winTitle) winTitle.classList.remove('hidden-fade');
                     if(btnRestart) btnRestart.classList.remove('hidden-fade');
+                    
+                    AudioManager.play('cumbre');
                 }
             });
         }
@@ -558,16 +639,20 @@ function animarDescensoCumbre() {
 function animarSecuenciaColor(finalHex) {
     isCycling = true;
     targetHex = finalHex; 
-    let duration = 3000; 
+    let duration = 5000; // Ajustado a 5 segungos  para coincidir con la ruleta
     let intervalTime = 120; 
     let elapsed = 0;
     
     txtTargetLabel.innerText = "SELECCIONANDO:";
     
+    // Dispara el sonido 1 sola vez al inicio de la secuencia
+    AudioManager.play('ruleta');
+    
     let timer = setInterval(() => {
         elapsed += intervalTime;
         if (elapsed >= duration) {
             clearInterval(timer);
+            AudioManager.play('color_escogido'); 
             colorTarget.style.backgroundColor = `#${finalHex}`;
             txtTargetLabel.innerText = "BUSCAR NODO:";
             isCycling = false; 
@@ -587,6 +672,7 @@ function animarSecuenciaColor(finalHex) {
 // ==========================================
 function triggerEclipse() {
     isCycling = true; 
+    AudioManager.play('intro_evento'); 
     if (eclipseOverlay) {
         eclipseOverlay.classList.remove('hidden-fade');
         eclipseOverlay.style.pointerEvents = 'auto'; 
@@ -596,8 +682,8 @@ function triggerEclipse() {
 if(btnEclipseStart) {
     btnEclipseStart.addEventListener('click', (e) => {
         if (eclipseOverlay && eclipseOverlay.classList.contains('hidden-fade')) return; 
-
         if (isZeroGravity || isTorbellinoMode || isTensionMode) return; 
+        
         if (eclipseOverlay) {
             eclipseOverlay.classList.add('hidden-fade');
             eclipseOverlay.style.pointerEvents = 'none'; 
@@ -607,17 +693,14 @@ if(btnEclipseStart) {
 }
 
 function startEclipse() {
+    AudioManager.play('eclipse_off'); 
+
     isEclipseMode = true;
     isCycling = false; 
-    
-    // Invertir color del HUD a blanco
     if(uiLayer) uiLayer.classList.add('eclipse-ui');
     
     scene.background.setHex(0x000000);
-    ambientLight.intensity = 0;
-    hemiLight.intensity = 0;
-    dirLightFront.intensity = 0;
-    dirLightBack.intensity = 0;
+    ambientLight.intensity = 0; hemiLight.intensity = 0; dirLightFront.intensity = 0; dirLightBack.intensity = 0;
     
     levels.forEach(lvl => {
         lvl.group.children.forEach(mesh => {
@@ -636,8 +719,6 @@ function endEclipse() {
         eclipseOverlay.classList.add('hidden-fade');
         eclipseOverlay.style.pointerEvents = 'none'; 
     }
-    
-    // Restaurar color original del HUD
     if(uiLayer) uiLayer.classList.remove('eclipse-ui');
     
     if (!isEclipseMode) return;
@@ -679,7 +760,11 @@ window.addEventListener('mousemove', (e) => {
 function startTension() {
     isTensionMode = true;
     tensionClicks = 0;
-    tensionTimeLeft = 3.0; 
+    tensionTimeLeft = 5.0; 
+    
+    AudioManager.play('tension');
+    AudioManager.play('ticking');
+
     tensionUI.classList.remove('hidden');
     tensionProgress.style.width = '0%';
     gsap.to(markerMesh.position, { x: "+=0.15", z: "-=0.15", duration: 0.05, yoyo: true, repeat: -1, id: "tensionVibrate" });
@@ -698,19 +783,28 @@ function updateTensionBar() {
 }
 
 function winTension() {
+    AudioManager.stop('tension');
+    AudioManager.stop('ticking');
     endTension(false);
     commitLevelAdvance(); 
 }
 
 function failTension() {
+    AudioManager.stop('tension');
+    AudioManager.stop('ticking');
+    AudioManager.play('event_loss');
+
     endTension(true);
-    gsap.to(markerMesh.material.emissive, { r: 1, g: 0, b: 0, duration: 0.2, yoyo: true, repeat: 3 });
-    gsap.fromTo(camera.position,
-        { y: camera.position.y - 1 },
-        { y: camera.position.y + 1, duration: 0.05, yoyo: true, repeat: 10, 
-            onComplete: () => revertToLevel(currentLevel - 1) 
-        }
-    );
+    rotarNivelesSuperiores();
+    animarCaidaMarcador(null, () => {
+        gsap.to(markerMesh.material.emissive, { r: 1, g: 0, b: 0, duration: 0.2, yoyo: true, repeat: 3 });
+        gsap.fromTo(camera.position,
+            { y: camera.position.y - 1 },
+            { y: camera.position.y + 1, duration: 0.05, yoyo: true, repeat: 10,
+                onComplete: () => revertToLevel(currentLevel - 1)
+            }
+        );
+    });
 }
 
 function endTension(forceStop) {
@@ -736,6 +830,7 @@ const TORBELLINO_FACTOR_LENTO = 0.25;
 
 function triggerTorbellino() {
     isCycling = true; 
+    AudioManager.play('intro_evento'); 
     if (torbellinoOverlay) {
         torbellinoOverlay.classList.remove('hidden-fade');
         torbellinoOverlay.style.pointerEvents = 'auto'; 
@@ -747,7 +842,6 @@ function triggerTorbellino() {
             else if(hexStr === '00539b') name = 'AZUL';
             else if(hexStr === 'ffc72c') name = 'AMARILLO';
             else if(hexStr === '00853f') name = 'VERDE';
-            
             torbellinoColorName.innerText = name;
             torbellinoColorName.style.color = '#' + hexStr;
         }
@@ -757,7 +851,6 @@ function triggerTorbellino() {
 if (btnTorbellinoStart) {
     btnTorbellinoStart.addEventListener('click', () => {
         if (torbellinoOverlay && torbellinoOverlay.classList.contains('hidden-fade')) return;
-
         if (torbellinoOverlay) {
             torbellinoOverlay.classList.add('hidden-fade');
             torbellinoOverlay.style.pointerEvents = 'none'; 
@@ -767,11 +860,14 @@ if (btnTorbellinoStart) {
 }
 
 function startTorbellino() {
+    AudioManager.play('fondo_vortice');
+
     endEclipse();
     endTension(true);
     isTorbellinoMode = true;
     isCycling = true; 
     torbellinoFoundCount = 0;
+    torbellinoErrors = 0;
     torbellinoNodes = [];
     torbellinoSlowed = false;
 
@@ -820,6 +916,7 @@ function startTorbellino() {
 
     torbellinoRequired = numObjetivo;
     actualizarDotsTorbellino();
+    actualizarErroresTorbellino();
     if(torbellinoUI) torbellinoUI.classList.remove('hidden');
 
     gsap.to(camera.position, { x: TORBELLINO_RADIO + 26, y: yCenter + 2, z: 0, duration: 3.5, ease: "power2.inOut", onUpdate: () => controls.update() });
@@ -858,11 +955,49 @@ function actualizarDotsTorbellino() {
     }
 }
 
+function actualizarErroresTorbellino() {
+    const errorContainer = document.getElementById('torbellino-errors');
+    if (!errorContainer) return;
+    errorContainer.innerHTML = '';
+    for (let i = 0; i < TORBELLINO_MAX_ERRORS; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'torbellino-error-dot' + (i < torbellinoErrors ? ' burned' : '');
+        errorContainer.appendChild(dot);
+    }
+}
+
+function failTorbellino() {
+    AudioManager.fadeOut('fondo_vortice');
+    AudioManager.play('event_loss');
+
+    clearTimeout(torbellinoTimer);
+    isTorbellinoMode = false;
+    if(torbellinoUI) torbellinoUI.classList.add('hidden');
+    torbellinoNodes.forEach(node => { gsap.killTweensOf(node.mesh.material); torbellinoGroup.remove(node.mesh); node.mesh.material.dispose(); });
+    torbellinoNodes = [];
+    torbellinoGroup.visible = false;
+    levels.forEach(lvl => lvl.group.children.forEach(mesh => { if (mesh.userData.isStructure || mesh.userData.isNode) mesh.visible = true; }));
+    markerMesh.visible = true;
+    threadLines.forEach(line => line.visible = true);
+    gsap.to(scene.background, { r: 1, g: 1, b: 1, duration: 0.8 });
+    rotarNivelesSuperiores();
+    animarCaidaMarcador(null, () => {
+        gsap.to(markerMesh.material.emissive, { r: 1, g: 0, b: 0, duration: 0.15, yoyo: true, repeat: 5 });
+        gsap.fromTo(camera.position,
+            { y: camera.position.y - 1.5 },
+            { y: camera.position.y + 1.5, duration: 0.06, yoyo: true, repeat: 8,
+                onComplete: () => revertToLevel(currentLevel - 1)
+            }
+        );
+    });
+}
+
 function manejarClickTorbellino(clickedMesh) {
     const nodeData = torbellinoNodes.find(n => n.mesh === clickedMesh);
     if (!nodeData || nodeData.isFound) return;
 
     if (nodeData.isTarget) {
+        AudioManager.play('seleccion_evento'); 
         nodeData.isFound = true;
         torbellinoFoundCount++;
         actualizarDotsTorbellino();
@@ -873,12 +1008,20 @@ function manejarClickTorbellino(clickedMesh) {
         gsap.to(nodeData.mesh.scale, { x: 1.3, y: 1.3, z: 1.3, duration: 0.25, yoyo: true, repeat: 1 });
         if (torbellinoFoundCount >= torbellinoRequired) setTimeout(() => endTorbellino(), 500);
     } else {
+        AudioManager.play('error'); 
+        torbellinoErrors++;
+        actualizarErroresTorbellino();
         const f = new THREE.Color(0xDA251D);
         gsap.to(nodeData.mesh.material.emissive, { r: f.r, g: f.g, b: f.b, duration: 0.15, yoyo: true, repeat: 1, onComplete: () => nodeData.mesh.material.emissive.setRGB(0, 0, 0) });
+        if (torbellinoErrors >= TORBELLINO_MAX_ERRORS) {
+            setTimeout(() => failTorbellino(), 400);
+        }
     }
 }
 
 function endTorbellino() {
+    AudioManager.fadeOut('fondo_vortice');
+
     isTorbellinoMode = false;
     isCycling = false;
     clearTimeout(torbellinoTimer);
@@ -907,12 +1050,12 @@ function endTorbellino_reset() {
     scene.background.setRGB(1, 1, 1);
 }
 
-
 // ==========================================
-// 4. GRAVEDAD CERO (ANOMALÍA GRAVITACIONAL)
+// 4. GRAVEDAD CERO
 // ==========================================
 function triggerZeroGravity() {
     isCycling = true; 
+    AudioManager.play('intro_evento'); 
     if (gravedadOverlay) {
         gravedadOverlay.classList.remove('hidden-fade');
         gravedadOverlay.style.pointerEvents = 'auto'; 
@@ -922,7 +1065,6 @@ function triggerZeroGravity() {
 if (btnGravedadStart) {
     btnGravedadStart.addEventListener('click', () => {
         if (gravedadOverlay && gravedadOverlay.classList.contains('hidden-fade')) return;
-
         if (gravedadOverlay) {
             gravedadOverlay.classList.add('hidden-fade');
             gravedadOverlay.style.pointerEvents = 'none'; 
@@ -931,9 +1073,91 @@ if (btnGravedadStart) {
     });
 }
 
+function startGravedadTimer() {
+    gravedadTimeLeft = GRAVEDAD_TIME_LIMIT;
+    isTickingGravedad = false; 
+    
+    const bar = document.getElementById('gravedad-timer-bar');
+    if (bar) {
+        bar.style.transition = 'width 0.1s linear, background-color 0.6s ease';
+        bar.style.width = '100%';
+        bar.style.backgroundColor = '#DA251D'; 
+    }
+    stopGravedadTimer();
+
+    const palette = ['#DA251D', '#00539B', '#FFC72C', '#00853F'];
+    let paletteIndex = 0;
+    let colorCycleInterval = null;
+
+    colorCycleInterval = setInterval(() => {
+        if (!isZeroGravity) { clearInterval(colorCycleInterval); return; }
+        if (gravedadTimeLeft > 5) {
+            paletteIndex = (paletteIndex + 1) % palette.length;
+            if (bar) bar.style.backgroundColor = palette[paletteIndex];
+        }
+    }, 1200);
+
+    gravedadTimerInterval = setInterval(() => {
+        gravedadTimeLeft -= 0.1;
+        
+        if (gravedadTimeLeft <= 5.0 && !isTickingGravedad && gravedadTimeLeft > 0) {
+            isTickingGravedad = true;
+            AudioManager.play('ticking');
+        }
+
+        const pct = Math.max(0, (gravedadTimeLeft / GRAVEDAD_TIME_LIMIT) * 100);
+        if (bar) {
+            bar.style.width = pct + '%';
+            if (gravedadTimeLeft <= 5 && gravedadTimeLeft > 0) {
+                clearInterval(colorCycleInterval);
+                bar.style.backgroundColor = '#DA251D';
+            }
+        }
+        if (gravedadTimeLeft <= 0) failGravedad();
+    }, 100);
+}
+
+function stopGravedadTimer() {
+    clearInterval(gravedadTimerInterval);
+    gravedadTimerInterval = null;
+    const bar = document.getElementById('gravedad-timer-bar');
+    if (bar) bar.style.width = '0%';
+}
+
+function failGravedad() {
+    AudioManager.fadeOut('fondo_gravedad');
+    AudioManager.stop('ticking');
+    AudioManager.play('event_loss');
+
+    stopGravedadTimer();
+    endZeroGravityForce();
+    levels.forEach(lvl => lvl.group.children.forEach(mesh => {
+        if (mesh.userData.origPos) {
+            mesh.position.copy(mesh.userData.origPos);
+            mesh.rotation.copy(mesh.userData.origRot);
+            mesh.userData.driftVelocity = null;
+        }
+    }));
+    markerMesh.visible = true;
+    threadLines.forEach(line => line.visible = true);
+    rotarNivelesSuperiores();
+    animarCaidaMarcador(null, () => {
+        gsap.to(markerMesh.material.emissive, { r: 1, g: 0, b: 0, duration: 0.15, yoyo: true, repeat: 5 });
+        gsap.fromTo(camera.position,
+            { y: camera.position.y - 1.5 },
+            { y: camera.position.y + 1.5, duration: 0.06, yoyo: true, repeat: 8,
+                onComplete: () => revertToLevel(currentLevel - 1)
+            }
+        );
+    });
+}
+
 function startZeroGravity() {
+    AudioManager.play('fondo_gravedad');
+
     isZeroGravity = true;
     isCycling = false; 
+    startGravedadTimer();
     
     isEclipseMode = false;
     if (eclipseOverlay) {
@@ -968,20 +1192,15 @@ function startZeroGravity() {
     if(markerMesh) markerMesh.visible = false;
     threadLines.forEach(line => line.visible = false);
 
-    controls.enableRotate = true;
-    controls.enablePan = true;
+    controls.enableRotate = true; controls.enablePan = true;
 
     const camDir = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
     const zoomOutDist = 30; 
     const newCamPos = camera.position.clone().add(camDir.multiplyScalar(zoomOutDist));
     
     gsap.to(camera.position, {
-        x: newCamPos.x,
-        y: newCamPos.y + 5, 
-        z: newCamPos.z,
-        duration: 3.5, 
-        ease: "power2.inOut",
-        onUpdate: () => controls.update()
+        x: newCamPos.x, y: newCamPos.y + 5, z: newCamPos.z,
+        duration: 3.5, ease: "power2.inOut", onUpdate: () => controls.update()
     });
 
     scene.updateMatrixWorld(true);
@@ -998,13 +1217,9 @@ function startZeroGravity() {
             let centerPos = new THREE.Vector3(0, actualCenter.y, 0);
             let dir = new THREE.Vector3().subVectors(actualCenter, centerPos).normalize();
             
-            if (dir.lengthSq() === 0) {
-                dir = new THREE.Vector3(Math.random()-0.5, 0, Math.random()-0.5).normalize();
-            }
+            if (dir.lengthSq() === 0) dir = new THREE.Vector3(Math.random()-0.5, 0, Math.random()-0.5).normalize();
             
-            dir.x += (Math.random() - 0.5) * 0.4; 
-            dir.y += (Math.random() - 0.5) * 0.8; 
-            dir.z += (Math.random() - 0.5) * 0.4;
+            dir.x += (Math.random() - 0.5) * 0.4; dir.y += (Math.random() - 0.5) * 0.8; dir.z += (Math.random() - 0.5) * 0.4;
             dir.normalize();
 
             const speed = 0.8 + Math.random() * 1.2; 
@@ -1012,22 +1227,19 @@ function startZeroGravity() {
             mesh.userData.driftPhase = Math.random() * Math.PI * 2; 
 
             mesh.userData.driftRotation = new THREE.Vector3(
-                (Math.random() - 0.5) * 0.005,
-                (Math.random() - 0.5) * 0.005,
-                (Math.random() - 0.5) * 0.005
+                (Math.random() - 0.5) * 0.005, (Math.random() - 0.5) * 0.005, (Math.random() - 0.5) * 0.005
             );
 
             if (index === currentLevel + 1 && !mesh.userData.isStructure) {
                 const mat = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
                 if (mat && mat.color.getHexString() === targetHex) {
-                    
                     mesh.userData.origScale = mesh.scale.clone();
                     gsap.killTweensOf(mesh.scale);
                     mesh.scale.copy(mesh.userData.origScale);
-
                     mesh.userData.origEmissive = mat.emissive.clone();
-                    gsap.to(mat.emissive, { r: mat.color.r, g: mat.color.g, b: mat.color.b, duration: 0.8, yoyo: true, repeat: -1, ease: "power1.inOut" });
-
+                    mat.emissiveIntensity = 0;
+                    gsap.to(mat, { emissiveIntensity: 2.2, duration: 0.6, yoyo: true, repeat: -1, ease: "power2.inOut" });
+                    gsap.to(mat.emissive, { r: mat.color.r, g: mat.color.g, b: mat.color.b, duration: 0 });
                     mesh.userData.isTargetNode = true;
                 }
             }
@@ -1036,11 +1248,14 @@ function startZeroGravity() {
 }
 
 function endZeroGravity(clickedMesh, localClickPoint) {
+    AudioManager.fadeOut('fondo_gravedad');
+    AudioManager.stop('ticking');
+
     isZeroGravity = false;
+    stopGravedadTimer();
     isCycling = true; 
     
-    controls.enableRotate = false;
-    controls.enablePan = false;
+    controls.enableRotate = false; controls.enablePan = false;
 
     let totalAnims = 0;
     let completedAnims = 0;
@@ -1049,58 +1264,35 @@ function endZeroGravity(clickedMesh, localClickPoint) {
         lvl.group.children.forEach(mesh => {
             if (mesh.userData.origPos) {
                 totalAnims++;
-                
                 if (mesh.userData.isTargetNode) {
                     gsap.killTweensOf(mesh.scale);
                     const mat = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
-                    gsap.killTweensOf(mat.emissive);
+                    gsap.killTweensOf(mat.emissive); gsap.killTweensOf(mat);
                     if (mesh.userData.origEmissive) mat.emissive.copy(mesh.userData.origEmissive);
+                    mat.emissiveIntensity = 0.6;
                     mesh.userData.isTargetNode = false;
                 }
-
-                if (mesh.userData.origScale) {
-                    gsap.to(mesh.scale, {
-                        x: mesh.userData.origScale.x,
-                        y: mesh.userData.origScale.y,
-                        z: mesh.userData.origScale.z,
-                        duration: 1.5,
-                        ease: "power3.inOut"
-                    });
-                }
-
-                gsap.to(mesh.position, {
-                    x: mesh.userData.origPos.x,
-                    y: mesh.userData.origPos.y,
-                    z: mesh.userData.origPos.z,
-                    duration: 1.5,
-                    ease: "power3.inOut"
-                });
+                if (mesh.userData.origScale) gsap.to(mesh.scale, { x: mesh.userData.origScale.x, y: mesh.userData.origScale.y, z: mesh.userData.origScale.z, duration: 1.5, ease: "power3.inOut" });
+                gsap.to(mesh.position, { x: mesh.userData.origPos.x, y: mesh.userData.origPos.y, z: mesh.userData.origPos.z, duration: 1.5, ease: "power3.inOut" });
                 
                 const startQuat = mesh.quaternion.clone();
                 const endQuat = new THREE.Quaternion().setFromEuler(mesh.userData.origRot);
                 const proxy = { t: 0 };
 
                 gsap.to(proxy, {
-                    t: 1,
-                    duration: 1.5,
-                    ease: "power3.inOut",
-                    onUpdate: () => {
-                        mesh.quaternion.slerpQuaternions(startQuat, endQuat, proxy.t);
-                    },
+                    t: 1, duration: 1.5, ease: "power3.inOut",
+                    onUpdate: () => mesh.quaternion.slerpQuaternions(startQuat, endQuat, proxy.t),
                     onComplete: () => {
                         mesh.position.copy(mesh.userData.origPos);
                         mesh.rotation.copy(mesh.userData.origRot);
                         if (mesh.userData.origScale) mesh.scale.copy(mesh.userData.origScale);
                         mesh.userData.driftVelocity = null;
-
                         completedAnims++;
                         if (completedAnims === totalAnims) {
                             if(markerMesh) markerMesh.visible = true;
                             threadLines.forEach(line => line.visible = true);
                             isCycling = false;
-
                             scene.updateMatrixWorld(true);
-
                             commitLevelAdvance();
                         }
                     }
@@ -1113,9 +1305,9 @@ function endZeroGravity(clickedMesh, localClickPoint) {
 function endZeroGravityForce() {
     if (!isZeroGravity) return;
     isZeroGravity = false;
+    stopGravedadTimer();
     
-    controls.enableRotate = false;
-    controls.enablePan = false;
+    controls.enableRotate = false; controls.enablePan = false;
 
     levels.forEach(lvl => {
         lvl.group.children.forEach(mesh => {
@@ -1123,21 +1315,14 @@ function endZeroGravityForce() {
                 if (mesh.userData.isTargetNode) {
                     gsap.killTweensOf(mesh.scale);
                     const mat = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
-                    gsap.killTweensOf(mat.emissive);
+                    gsap.killTweensOf(mat.emissive); gsap.killTweensOf(mat);
                     if (mesh.userData.origEmissive) mat.emissive.copy(mesh.userData.origEmissive);
+                    mat.emissiveIntensity = 0.6;
                     mesh.userData.isTargetNode = false;
                 }
-                
-                if (mesh.userData.origScale) {
-                    gsap.killTweensOf(mesh.scale);
-                    mesh.scale.copy(mesh.userData.origScale);
-                }
-
-                gsap.killTweensOf(mesh.position);
-                gsap.killTweensOf(mesh.rotation);
-                
-                mesh.position.copy(mesh.userData.origPos);
-                mesh.rotation.copy(mesh.userData.origRot);
+                if (mesh.userData.origScale) { gsap.killTweensOf(mesh.scale); mesh.scale.copy(mesh.userData.origScale); }
+                gsap.killTweensOf(mesh.position); gsap.killTweensOf(mesh.rotation);
+                mesh.position.copy(mesh.userData.origPos); mesh.rotation.copy(mesh.userData.origRot);
                 mesh.userData.driftVelocity = null;
             }
         });
@@ -1154,13 +1339,14 @@ function revertToLevel(targetLvl) {
         if (levels[i] && levels[i].group.visible) {
             const grp = levels[i].group;
             const FLY = 40;
+            AudioManager.play('swoosh'); // Sonido Swoosh al ocultar nivel penalizado
             gsap.to(grp.position, {
                 y: grp.position.y + FLY,
                 duration: 0.7,
                 ease: "power2.in",
                 onComplete: () => {
                     grp.visible = false;
-                    grp.position.y -= FLY; 
+                    grp.position.y -= FLY;
                     grp.children.forEach(mesh => {
                         const mats = Array.isArray(mesh.material) ? mesh.material : (mesh.material ? [mesh.material] : []);
                         mats.forEach(m => m.opacity = 0);
@@ -1170,10 +1356,7 @@ function revertToLevel(targetLvl) {
         }
     }
 
-    while (pathPoints.length > targetLvl + 1) {
-        pathPoints.pop();
-    }
-    
+    while (pathPoints.length > targetLvl + 1) pathPoints.pop();
     while (threadLines.length > Math.max(0, targetLvl)) {
         const t = threadLines.pop();
         scene.remove(t);
@@ -1191,22 +1374,22 @@ function revertToLevel(targetLvl) {
     } else {
         const safePos = pathPoints[pathPoints.length - 1];
         markerMesh.position.copy(safePos);
-        
         const centerOfTower = new THREE.Vector3(0, safePos.y, 0);
         const outwardDir = new THREE.Vector3().subVectors(safePos, centerOfTower).normalize();
         orientarMarcador(outwardDir);
-
         actualizarUI();
         const radioMantenido = 58;
-        const camX = outwardDir.x * radioMantenido;
-        const camZ = outwardDir.z * radioMantenido;
+        const camX = outwardDir.x * radioMantenido; const camZ = outwardDir.z * radioMantenido;
         gsap.to(controls.target, { x: safePos.x * 0.3, y: levels[currentLevel].yRef, z: safePos.z * 0.3, duration: 1.5 });
         gsap.to(camera.position, { x: camX, y: levels[currentLevel].yRef + 6, z: camZ, duration: 1.5 });
     }
 }
 
-// --- INTERACCIÓN DE CLICK (Ratón) ---
+// --- INTERACCIÓN DE CLICK ---
 window.addEventListener('click', (e) => {
+    
+    // para ignorar clicks al inicio
+    if (e.target.id === 'start-overlay') return;
     
     if (isZeroGravity) {
         mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -1214,22 +1397,21 @@ window.addEventListener('click', (e) => {
         raycaster.setFromCamera(mouse, camera);
 
         const interactables = [];
-        levels.forEach(lvl => {
-            lvl.group.children.forEach(mesh => {
-                if (mesh.userData.isTargetNode) {
-                    interactables.push(mesh);
-                }
-            });
-        });
+        levels.forEach(lvl => { lvl.group.children.forEach(mesh => { if (mesh.userData.isTargetNode) interactables.push(mesh); }); });
 
         const intersects = raycaster.intersectObjects(interactables, false);
 
         if (intersects.length > 0) {
+            AudioManager.play('seleccion_evento'); 
             let hitMesh = intersects[0].object;
             let exactClickPoint = intersects[0].point.clone(); 
-            
             const localClickPoint = hitMesh.worldToLocal(exactClickPoint);
             endZeroGravity(hitMesh, localClickPoint);
+        } else {
+            const allMeshes = [];
+            levels.forEach(lvl => { lvl.group.children.forEach(mesh => { allMeshes.push(mesh); }); });
+            const missIntersects = raycaster.intersectObjects(allMeshes, false);
+            if(missIntersects.length > 0 && !missIntersects[0].object.userData.isStructure) AudioManager.play('error');
         }
         return; 
     }
@@ -1240,9 +1422,7 @@ window.addEventListener('click', (e) => {
         mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObjects(torbellinoGroup.children, true);
-        if (intersects.length > 0) {
-            manejarClickTorbellino(intersects[0].object);
-        }
+        if (intersects.length > 0) manejarClickTorbellino(intersects[0].object);
         return;
     }
 
@@ -1270,6 +1450,9 @@ window.addEventListener('click', (e) => {
             const matClickeado = Array.isArray(clickedMesh.material) ? clickedMesh.material[0] : clickedMesh.material;
             
             if (matClickeado && (currentLevel === -1 || matClickeado.color.getHexString() === targetHex)) {
+                
+                AudioManager.play('seleccion_nodo'); 
+
                 if(isEclipseMode) endEclipse(); 
                 
                 let eventType = 'normal';
@@ -1301,6 +1484,8 @@ window.addEventListener('click', (e) => {
                 }
                 
                 avanzarNivel(clickedMesh, intersects[0].point, eventType);
+            } else {
+                AudioManager.play('error'); 
             }
         }
     } 
@@ -1332,31 +1517,55 @@ function generarPuntosRuta(startPos, endPos) {
     if (delta >  Math.PI) delta -= Math.PI * 2;
     if (delta < -Math.PI) delta += Math.PI * 2;
 
-    const yStart = startPos.y;
-    const yEnd   = endPos.y;
-
-    const STEPS = 80;
-    const puntos = [];
+    const yStart = startPos.y; const yEnd = endPos.y;
+    const STEPS = 80; const puntos = [];
 
     for (let i = 0; i <= STEPS; i++) {
         const t   = i / STEPS;
         const ang = angStart + delta * t;
         const y   = yStart + (yEnd - yStart) * t;
 
-        const ease = t < 0.5
-            ? 4 * t * t * t
-            : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
         const ramp = Math.sin(t * Math.PI); 
         const r = radioA * (1 - t) + radioB * t + (RADIO_ARCO - (radioA * (1-t) + radioB * t)) * ramp;
 
-        puntos.push(new THREE.Vector3(
-            Math.cos(ang) * r,
-            y,
-            Math.sin(ang) * r
-        ));
+        puntos.push(new THREE.Vector3(Math.cos(ang) * r, y, Math.sin(ang) * r));
     }
-
     return puntos;
+}
+
+function animarCaidaMarcador(targetPos, onFallComplete) {
+    const caer = () => {
+        AudioManager.play('caida'); 
+        gsap.to(markerMesh.position, {
+            y: markerMesh.position.y - 60,
+            duration: 0.8,
+            ease: "power3.in",
+            onComplete: onFallComplete
+        });
+    };
+
+    if (targetPos && scene.children.includes(markerMesh)) {
+        const startPos = markerMesh.position.clone();
+        const routePoints = generarPuntosRuta(startPos, targetPos);
+        const splineCurve = new THREE.CatmullRomCurve3(routePoints, false, 'catmullrom', 0);
+        const animState = { t: 0 };
+        gsap.to(animState, {
+            t: 1, duration: 0.8, ease: "power2.in",
+            onUpdate: () => {
+                const pt = splineCurve.getPoint(animState.t);
+                const towerCenter = new THREE.Vector3(0, pt.y, 0);
+                const outward = new THREE.Vector3().subVectors(pt, towerCenter).normalize();
+                orientarMarcador(outward);
+                markerMesh.position.copy(pt.clone().add(outward.clone().multiplyScalar(FACE_OFFSET)));
+            },
+            onComplete: caer
+        });
+    } else if (scene.children.includes(markerMesh)) {
+        caer();
+    } else {
+        onFallComplete();
+    }
 }
 
 function avanzarNivel(nodo, exactClickPoint, eventType = 'normal') {
@@ -1389,17 +1598,14 @@ function avanzarNivel(nodo, exactClickPoint, eventType = 'normal') {
 
         const threadGeo = new THREE.BufferGeometry().setFromPoints(curvePoints);
         threadGeo.setDrawRange(0, 0);
-        
         const threadMat = new THREE.LineBasicMaterial({ color: 0x222222, linewidth: 3 });
-        const newThread = new THREE.Line(threadGeo, threadMat);
+        let newThread = new THREE.Line(threadGeo, threadMat);
         scene.add(newThread);
         threadLines.push(newThread);
         
         const animState = { t: 0 };
         gsap.to(animState, {
-            t: 1,
-            duration: 1.5,
-            ease: "power2.inOut",
+            t: 1, duration: 1.5, ease: "power2.inOut",
             onUpdate: () => {
                 const currentPt = splineCurve.getPoint(animState.t);
                 const towerCenter = new THREE.Vector3(0, currentPt.y, 0);
@@ -1407,25 +1613,36 @@ function avanzarNivel(nodo, exactClickPoint, eventType = 'normal') {
                 orientarMarcador(currentOutward);
                 markerMesh.position.copy(currentPt.clone().add(currentOutward.clone().multiplyScalar(FACE_OFFSET)));
                 
-                const drawCount = Math.floor(animState.t * maxPoints) + 1;
-                threadGeo.setDrawRange(0, drawCount);
+                if (newThread) {
+                    const drawCount = Math.floor(animState.t * maxPoints) + 1;
+                    newThread.geometry.setDrawRange(0, drawCount);
+                }
             },
             onComplete: () => {
                 orientarMarcador(outwardDir);
                 markerMesh.position.copy(meshPos);
-                
-                if (eventType === 'tension') {
-                    commitLevelAdvance(() => startTension()); 
-                } else if (eventType === 'torbellino') {
-                    commitLevelAdvance(() => triggerTorbellino());
-                } else if (eventType === 'gravedad') {
-                    commitLevelAdvance(() => triggerZeroGravity()); 
-                } else if (eventType === 'eclipse') {
-                    commitLevelAdvance(() => triggerEclipse()); 
-                } else {
-                    commitLevelAdvance();
-                }
+
+                if (eventType === 'tension') { commitLevelAdvance(() => startTension()); } 
+                else if (eventType === 'torbellino') { commitLevelAdvance(() => triggerTorbellino()); } 
+                else if (eventType === 'gravedad') { commitLevelAdvance(() => triggerZeroGravity()); } 
+                else if (eventType === 'eclipse') { commitLevelAdvance(() => triggerEclipse()); } 
+                else { commitLevelAdvance(); }
             }
+        });
+    }
+}
+
+function rotarNivelesSuperiores() {
+    AudioManager.playRandom(['giro1', 'giro2']); 
+    for (let i = currentLevel + 1; i < levels.length; i++) {
+        const grp = levels[i].group;
+        if (!grp.visible) continue;
+        const numGiros = 1 + Math.floor(Math.random() * 3);
+        const sentido = Math.random() < 0.5 ? 1 : -1;
+        const anguloTotal = sentido * numGiros * (Math.PI / 2);
+        const delay = (i - currentLevel - 1) * 0.12;
+        gsap.to(grp.rotation, {
+            y: grp.rotation.y + anguloTotal, duration: 0.5 + Math.random() * 0.4, delay, ease: "power2.inOut"
         });
     }
 }
@@ -1440,17 +1657,18 @@ function commitLevelAdvance(onLevelReadyCallback = null) {
             mats.forEach(m => m.opacity = 1);
         });
 
-        nextGroup.position.y += DROP;
-        nextGroup.visible = true;
+        if (nextGroup.visible) {
+            if(onLevelReadyCallback) onLevelReadyCallback();
+        } else {
+            nextGroup.position.y += DROP;
+            nextGroup.visible = true;
+            AudioManager.play('swoosh'); // Sonido Swoosh al aparecer nuevo nivel
 
-        gsap.to(nextGroup.position, {
-            y: nextGroup.position.y - DROP,
-            duration: 1.0,
-            ease: "power3.out",
-            onComplete: () => {
-                if(onLevelReadyCallback) onLevelReadyCallback();
-            }
-        });
+            gsap.to(nextGroup.position, {
+                y: nextGroup.position.y - DROP, duration: 1.0, ease: "power3.out",
+                onComplete: () => { if(onLevelReadyCallback) onLevelReadyCallback(); }
+            });
+        }
     } else {
         if(onLevelReadyCallback) onLevelReadyCallback();
     }
@@ -1462,8 +1680,7 @@ function commitLevelAdvance(onLevelReadyCallback = null) {
     const outwardDir = new THREE.Vector3().subVectors(safePos, centerOfTower).normalize();
 
     const radioMantenido = 58; 
-    const camX = outwardDir.x * radioMantenido;
-    const camZ = outwardDir.z * radioMantenido;
+    const camX = outwardDir.x * radioMantenido; const camZ = outwardDir.z * radioMantenido;
 
     gsap.to(controls.target, { x: safePos.x * 0.3, y: levels[currentLevel].yRef, z: safePos.z * 0.3, duration: 1.5, ease: "power2.inOut" });
     gsap.to(camera.position, { x: camX, y: levels[currentLevel].yRef + 6, z: camZ, duration: 1.5, ease: "power2.inOut", onUpdate: () => controls.update() });
@@ -1479,26 +1696,17 @@ function rotar(angulo) {
         if (currentLevel + 1 >= levels.length) return;
         targetGroup = levels[currentLevel + 1].group;
     } 
-    if (targetGroup) gsap.to(targetGroup.rotation, { y: targetGroup.rotation.y + angulo, duration: 0.7, ease: "power2.inOut" });
+    if (targetGroup) {
+        AudioManager.playRandom(['giro1', 'giro2']); 
+        gsap.to(targetGroup.rotation, { y: targetGroup.rotation.y + angulo, duration: 0.7, ease: "power2.inOut" });
+    }
 }
 
 // --- LÓGICA DE LA INTERFAZ ---
-if (btnReglas && panelReglas) {
-    btnReglas.addEventListener('click', () => panelReglas.classList.remove('hidden-fade'));
-}
-if (btnCerrarReglas && panelReglas) {
-    btnCerrarReglas.addEventListener('click', () => panelReglas.classList.add('hidden-fade'));
-}
-if (btnVolver) {
-    btnVolver.addEventListener('click', () => window.location.href = 'index.html');
-}
-
-// --- BOTÓN DE REPETIR EXPERIENCIA ---
-if (btnRestart) {
-    btnRestart.addEventListener('click', () => {
-        window.location.reload(); 
-    });
-}
+if (btnReglas && panelReglas) { btnReglas.addEventListener('click', () => panelReglas.classList.remove('hidden-fade')); }
+if (btnCerrarReglas && panelReglas) { btnCerrarReglas.addEventListener('click', () => panelReglas.classList.add('hidden-fade')); }
+if (btnVolver) { btnVolver.addEventListener('click', () => window.location.href = 'index.html'); }
+if (btnRestart) { btnRestart.addEventListener('click', () => { window.location.reload(); }); }
 
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -1525,13 +1733,10 @@ function animate() {
             lvl.group.children.forEach(mesh => {
                 if (mesh.userData.driftVelocity) {
                     mesh.userData.driftVelocity.multiplyScalar(0.90);
-                    
                     mesh.position.add(mesh.userData.driftVelocity);
-                    
                     if (mesh.userData.driftVelocity.lengthSq() < 0.001) {
                         mesh.position.y += Math.sin(time + mesh.userData.driftPhase) * 0.005;
                     }
-
                     mesh.rotation.x += mesh.userData.driftRotation.x;
                     mesh.rotation.y += mesh.userData.driftRotation.y;
                     mesh.rotation.z += mesh.userData.driftRotation.z;

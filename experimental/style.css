@@ -46,7 +46,7 @@ header {
     font-weight: 800;
 }
 
-/* Modificado: Letra mucho más oscura y sólida */
+/* Letra mucho más oscura y sólida */
 #level-display {
     font-size: 16px;
     font-weight: 800;
@@ -236,7 +236,7 @@ button:hover {
     margin: 0;
 }
 
-/* --- CLASE NUEVA: DESVANECIMIENTO LIMPIO UI --- */
+/* --- DESVANECIMIENTO LIMPIO DEL HUD --- */
 .fade-hidden {
     opacity: 0 !important;
     pointer-events: none !important;
@@ -373,8 +373,8 @@ button:hover {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255,255,255,0.4);
-    background: transparent;
+    border: 1.5px solid rgba(40, 40, 40, 0.55);
+    background: rgba(255,255,255,0.08);
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -492,7 +492,48 @@ button:hover {
     color: var(--bg-pure);
 }
 
-/* UI FINAL VICTORIA */
+/* --- BARRA DE TIEMPO GRAVEDAD --- */
+#gravedad-timer-track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: transparent;
+    z-index: 200;
+    pointer-events: none;
+}
+
+#gravedad-timer-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #111111;
+    transition: width 0.12s linear, background-color 0.6s ease;
+    transform-origin: left center;
+}
+
+/* --- PUNTOS DE ERROR TORBELLINO --- */
+.torbellino-error-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.torbellino-error-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    background: transparent;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.torbellino-error-dot.burned {
+    background-color: #DA251D;
+    border-color: #DA251D;
+    box-shadow: 0px 0px 10px rgba(218, 37, 29, 0.9);
+}
 #win-title {
     position: absolute;
     top: 100px;
@@ -558,7 +599,7 @@ button:hover {
     background: transparent !important;
 }
 
-/* CORRECCIÓN: Caja interior negra, borde blanco, conservando el círculo de color intacto */
+/* CORRECCION ED CAJA RULETA */
 .eclipse-ui .target-container {
     background-color: #050505 !important;
     border-color: #ffffff !important;

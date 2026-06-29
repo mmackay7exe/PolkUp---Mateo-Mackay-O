@@ -5,8 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PolkUp - Experimental</title>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Librerías de animación y partículas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Librería de audio Howler.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+    
+    <!-- Importación de Three.js -->
     <script type="importmap">
         {
             "imports": {
@@ -18,6 +25,7 @@
 </head>
 <body>
     <div id="ui-layer">
+        <div id="gravedad-timer-track"><div id="gravedad-timer-bar"></div></div>
         <header>
             <div class="brand"><strong>POLK <br>UP</strong></div>
             <div id="level-display">NIVEL 0 / POLKUP</div>
@@ -72,6 +80,7 @@
 
     <div id="torbellino-ui" class="hidden">
         <div class="torbellino-progress-dots" id="torbellino-dots"></div>
+        <div class="torbellino-error-dots" id="torbellino-errors"></div>
     </div>
 
     <div id="panel-reglas" class="full-panel hidden-fade">
