@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <title>PolkUp</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <header class="header">
+    <a href="#hero" class="header__logo"></a>
+    <nav class="header__nav">
+      <ul class="header__menu">
+        <li><a href="#hero" class="header__link">PolkUp</a></li>
+        <li><a href="#tablero" class="header__link">Intro</a></li>
+        <li><a href="#objetivo" class="header__link">Objetivo del juego</a></li>
+        <li><a href="#galeria" class="header__link">Galería</a></li>
+        <li><a href="#fundamento" class="header__link">Fundamento</a></li>
+        <li><a href="#escalador" class="header__link">Experimental</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="intro" id="intro">
+    <canvas class="intro__canvas" id="intro-canvas"></canvas>
+    <div class="intro__hint">scroll</div>
+  </div>
+
+  <header class="header">
+    <a href="#hero" class="header__logo" aria-label="Ir al inicio"></a>
+
+    <nav class="header__nav">
+      <ul class="header__menu">
+        <li><a href="#hero" class="header__link">PolkUp</a></li>
+        <li><a href="#tablero" class="header__link">Intro</a></li>
+        <li><a href="#objetivo" class="header__link">Objetivo del juego</a></li>
+        <li><a href="#galeria" class="header__link">Galería</a></li>
+        <li><a href="#fundamento" class="header__link">Fundamento</a></li>
+        <li><a href="#escalador" class="header__link">Experimental</a></li>
+      </ul>
+    </nav>
+  </header>
+
+ <section class="hero" id="hero">
+    
+    <div class="hero__container">
+
+      <button class="hero__reset-btn" id="hero-reset-btn" aria-label="Reiniciar vista"></button>
+
+      <h1 class="hero__title hero__title--oculto" id="hero-title">
+        <span class="hero__title-letra" data-idx="0">P</span><span class="hero__title-letra" data-idx="1">o</span><span class="hero__title-letra" data-idx="2">l</span><span class="hero__title-letra" data-idx="3">k</span><span class="hero__title-letra" data-idx="4">U</span><span class="hero__title-letra" data-idx="5">p</span>
+      </h1>
+
+      <div class="hero__line-vertical"></div>
+      <div class="hero__line-horizontal"></div>
+      <div class="hero__shadow-ellipse"></div>
+
+      <div class="hero__text-block hero__text-block--oculto">
+        <p class="hero__subtitle">Gira. Adáptate. Asciende.</p>
+        <p class="hero__description">
+         Un <strong>juego táctico de movimiento tridimensional</strong>. 
+         Con solo <strong>dos varillas como apoyo</strong>, deberás ascender por una <strong>torre modular en constante rotación</strong>. 
+         Un <strong>espacio cambiante</strong> donde cada nivel que gira <strong>transforma tu ruta</strong> hacia la cima.
+        </p>
+      </div>
+
+      <canvas class="hero__canvas" id="hero-canvas"></canvas>
+
+      <a href="experimental" class="hero__ascenso-btn" aria-label="Iniciar el ascenso">
+        Iniciar el ascenso
+      </a>
+
+    </div> 
+  </section>
+
+  <hr class="divider">
+
+ <section class="tablero" id="tablero">
+
+    <div class="tablero__bg">
+      <div class="tablero__circulo tablero__circulo--1"></div>
+      <div class="tablero__circulo tablero__circulo--2"></div>
+      <div class="tablero__circulo tablero__circulo--3"></div>
+      <div class="tablero__circulo tablero__circulo--4"></div>
+    </div>
+ 
+    <div class="tablero__texto-bloque fade-in">
+      <h2 class="tablero__subtitulo">Del gesto observado a la tridimensionalidad del juego.</h2>
+      
+      <div class="tablero__grid">
+        <div class="tablero__caja">
+          <p class="tablero__texto"><strong>PolkUp nace de observar cómo el cuerpo interactúa con el espacio</strong>, evolucionando hacia un sistema constructivo modular: una torre de <strong>niveles interconectados</strong> que desafía el tradicional tablero plano.</p>
+        </div>
+        <div class="tablero__caja">
+          <p class="tablero__texto">El juego propone una <strong>estructura viva</strong> donde la <strong>rotación del eje central y el equilibrio de las varillas</strong> responden a las decisiones del jugador. Cada movimiento <strong>altera físicamente la torre y redefine el recorrido</strong>, convirtiendo el ascenso en una <strong>exploración constante de lo impredecible</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tablero__frase fade-in">
+      <div class="tablero__frase-izq">
+        <span>no hay horizonte</span>
+        <span>sin el rigor</span>
+      </div>
+      <div class="tablero__frase-der">
+        <span>extenso</span>
+        <span>del ascenso</span>
+      </div>
+    </div>
+
+    <div class="tablero__imagen-wrap fade-in delay-2" data-parallax="0.04">
+      <img class="tablero__img tablero__img--1" src="assets/dibujo-horizontal-1-01-10.png" alt="Tablero PolkUp capa 1">
+      <img class="tablero__img tablero__img--2" src="assets/dibujo-horizontal-2-01-10.png" alt="Tablero PolkUp capa 2">
+      <img class="tablero__img tablero__img--3" src="assets/dibujo-horizontal-3-01-10.png" alt="Tablero PolkUp capa 3">
+    </div>
+
+    <div class="tablero__leyenda fade-in delay-3">
+      <span class="tablero__leyenda-texto">EL TABLERO<br>CAMBIA</span>
+      <img class="tablero__leyenda-icono" src="assets/animacionrotacion0.svg" alt="Ícono tablero">
+      <span class="tablero__leyenda-texto tablero__leyenda-texto--right">TÚ DECIDES<br>EL CAMINO</span>
+    </div>
+ 
+  </section>
+
+  <hr class="divider">
+
+  <section class="tablero" id="objetivo">
+    <div class="tablero__texto-bloque fade-in">
+      <h2 class="tablero__subtitulo">Objetivo del juego</h2>
+      <div class="tablero__cuerpo">
+        <p>El objetivo es <strong>alcanzar la cima</strong> de una torre de niveles independientes que <strong>giran sobre un eje central</strong>. Utilizando un sistema físico de varillas como <strong>únicos puntos de apoyo y anclaje</strong>, los jugadores deben <strong>asegurar su estabilidad material</strong> mientras alteran la estructura del tablero para <strong>obstruir a sus oponentes</strong>.</p>
+      </div>
+      <div class="tablero__tabla-wrap">
+        <table class="tablero__tabla">
+          <thead>
+            <tr>
+              <th>Componente Físico</th>
+              <th>Función Mecánica</th>
+              <th>Impacto en la Partida</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Eje Central</strong></td>
+              <td><strong>Soporte vertical</strong></td>
+              <td>Vincula los módulos y permite la <strong>rotación independiente</strong>.</td>
+            </tr>
+            <tr>
+              <td><strong>Niveles Modulares</strong></td>
+              <td><strong>Plataformas móviles</strong></td>
+              <td>Alteran las rutas de paso y los <strong>puntos de anclaje</strong> disponibles.</td>
+            </tr>
+            <tr>
+              <td><strong>Varillas de Apoyo</strong></td>
+              <td><strong>Herramienta de avance</strong></td>
+              <td>Sustentan físicamente la <strong>posición del jugador</strong> en la estructura.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+ 
+  <hr class="divider">
+ 
+   <section class="mecanicas-wrap fade-in" id="mecanicas">
+ 
+    <h2 class="mecanicas__titulo">Mecánicas del juego</h2>
+ 
+    <div class="mecanicas">
+ 
+    <div class="mecanica" id="mecanica-eje">
+      <div class="mecanica__imagen-wrap">
+        <img class="mecanica__imagen" src="assets/imageneje-10.png" alt="Imagen Eje">
+      </div>
+      <h3 class="mecanica__titulo">EJE</h3>
+      <p class="mecanica__texto">
+        <strong>Todo gira en torno a un centro</strong>. El eje <strong>organiza el espacio</strong> y da sentido al movimiento.
+      </p>
+    </div>
+ 
+    <div class="mecanica__separador"></div>
+ 
+    <div class="mecanica" id="mecanica-giro">
+      <div class="mecanica__imagen-wrap">
+        <img class="mecanica__imagen" src="assets/imagen-giro-10.png" alt="Imagen Giro">
+      </div>
+      <h3 class="mecanica__titulo">GIRO</h3>
+      <p class="mecanica__texto">
+        Al girar, el jugador <strong>transforma su entorno</strong> y descubre <strong>nuevas posibilidades</strong>.
+      </p>
+    </div>
+ 
+    <div class="mecanica__separador"></div>
+ 
+    <div class="mecanica" id="mecanica-niveles">
+      <div class="mecanica__imagen-wrap">
+        <img class="mecanica__imagen mecanica__imagen--static" src="assets/imagen-niveles-10.png" alt="Imagen Niveles">
+        <img class="mecanica__imagen mecanica__imagen--hover" src="assets/animacion_niveles.gif" alt="Imagen Niveles animada">
+      </div>
+      <h3 class="mecanica__titulo">NIVELES</h3>
+      <p class="mecanica__texto">
+        Cada nivel es un <strong>desafío</strong>. Ascender implica <strong>adaptarse</strong> y <strong>elegir el próximo paso</strong>.
+      </p>
+    </div>
+ 
+    <div class="mecanica__separador"></div>
+ 
+    <div class="mecanica" id="mecanica-decision">
+      <div class="mecanica__imagen-wrap">
+        <img class="mecanica__imagen" src="assets/imagen-decision-10.png" alt="Imagen Decisión">
+      </div>
+      <h3 class="mecanica__titulo">DECISIÓN</h3>
+      <p class="mecanica__texto">
+        <strong>No existe un único camino</strong>. Cada decisión <strong>cambia el recorrido</strong> y redefine el horizonte.
+      </p>
+    </div>
+ 
+    <div class="mecanica__separador"></div>
+ 
+    <div class="mecanica" id="mecanica-meta">
+      <div class="mecanica__imagen-wrap">
+        <img class="mecanica__imagen" src="assets/imagen-meta-10.png" alt="Imagen Meta">
+      </div>
+      <h3 class="mecanica__titulo">META</h3>
+      <p class="mecanica__texto">
+        El <strong>objetivo está arriba</strong>, pero el camino se <strong>construye en cada movimiento</strong>.
+      </p>
+    </div>
+ 
+    </div>
+ 
+  </section>
+ 
+  <hr class="divider">
+ 
+  <section class="galeria fade-in" id="galeria">
+
+    <h2 class="galeria__titulo">Cada nivel,<br>es una <strong>nueva perspectiva</strong></h2>
+
+    <button class="galeria__btn galeria__btn--izq" id="galeria-izq" aria-label="Tira anterior">
+      <span class="galeria__btn-circulo" id="btn-color-izq"></span>
+    </button>
+
+    <button class="galeria__btn galeria__btn--der" id="galeria-der" aria-label="Tira siguiente">
+      <span class="galeria__btn-circulo" id="btn-color-der"></span>
+    </button>
+
+    <div class="galeria__contenedor" id="galeria-contenedor">
+
+      <div class="galeria__tira" data-tira="0" data-color="#0900ff">
+        <div class="galeria__foto-wrap">
+          <div class="galeria__foto-inner">
+            <div class="galeria__foto">
+              <img src="assets/ftogaleria_polkup (2).png" alt="Galería foto 1">
+            </div>
+            <div class="galeria__foto">
+              <img src="assets/ftogaleria_polkup (6).png" alt="Galería foto 2">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="galeria__tira" data-tira="1" data-color="#ff0000">
+        <div class="galeria__foto-wrap">
+          <div class="galeria__foto-inner">
+            <div class="galeria__foto">
+              <img src="assets/ftogaleria_polkup (5).png" alt="Galería foto 3">
+            </div>
+            <div class="galeria__foto">
+              <img src="assets/ftogaleria_polkup (4).png" alt="Galería foto 4">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="galeria__tira" data-tira="2" data-color="#39ca04">
+        <div class="galeria__foto-wrap">
+          <div class="galeria__foto-inner">
+            <div class="galeria__foto">
+              <img src="assets/ftogaleria_polkup (3).png" alt="Galería foto 5">
+            </div>
+            <div class="galeria__foto">
+              <img src="assets/ftogaleria_polkup (7).png" alt="Galería foto 6">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="galeria__tira" data-tira="3" data-color="#f4e434">
+        <div class="galeria__foto-wrap">
+          <div class="galeria__foto-inner">
+            <div class="galeria__foto">
+              <img src="assets/ftogaleria_polkup (1).png" alt="Galería foto 7">
+            </div>
+            <div class="galeria__foto">
+              <img src="assets/ftogaleria_polkup (8).png" alt="Galería foto 8">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="galeria__indicadores">
+      <span class="galeria__indicador activo" data-idx="0" style="background:#0900ff"></span>
+      <span class="galeria__indicador" data-idx="1" style="background:#ff0000"></span>
+      <span class="galeria__indicador" data-idx="2" style="background:#39ca04"></span>
+      <span class="galeria__indicador" data-idx="3" style="background:#f4e434"></span>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <section class="fundamento fade-in" id="fundamento">
+    
+    <div class="fundamento__bg">
+      <div class="fundamento__circulo fundamento__circulo--1"></div>
+      <div class="fundamento__circulo fundamento__circulo--2"></div>
+      <div class="fundamento__circulo fundamento__circulo--3"></div>
+      <div class="fundamento__circulo fundamento__circulo--4"></div>
+    </div>
+
+    <div class="fundamento__contenido">
+      <h2 class="fundamento__titulo">Fundamento</h2>
+
+      <div class="fundamento__grid">
+        
+        <div class="fundamento__caja">
+          <h4 class="fundamento__h4">Conceptos Escogidos</h4>
+          <p class="fundamento__texto">La columna vertebral de prácticamente cualquier juego de mesa es la <strong>exploración del tablero</strong> para cumplir con los objetivos planteados. PolkUp se diferencia al salir del plano bidimensional y traer a la mesa una <strong>estructura tridimensional que rota en cualquier dirección</strong>, mostrando de manera física y visual cómo el camino varía en cada momento. Junto a esto, las cartas que afectan la escalada son un elemento lúdico fundamental para transformar el trayecto hacia la cima en un <strong>recorrido tridimensional dinámico</strong>.</p>
+        </div>
+
+        <div class="fundamento__caja">
+          <h4 class="fundamento__h4">Reconceptualización</h4>
+          <p class="fundamento__texto">Esta experiencia experimental <strong>no es una réplica virtual 1:1</strong> del juego de mesa, sino una <strong>abstracción de sus cualidades físicas</strong> traducidas a interacciones a través del código. El proyecto traslada los rasgos centrales del tablero físico —la tridimensionalidad constructiva, el recorrido del escalador, el riesgo del error y el reconocimiento de nodos cromáticos— hacia un <strong>entorno digital que exige atención y motricidad adaptativa</strong>. Aquí, el código no simula: traduce la tensión, el cálculo táctico y el riesgo lúdico en una <strong>interfaz de precisión cinemática</strong>.</p>
+          <ul class="fundamento__lista">
+            <li><strong>Tridimensionalidad y Recorrido:</strong> La navegación se desarrolla mediante una exploración continua tridimensional con nodos aleatorios en cada partida. El usuario está obligado a <strong>orbitar la cámara y rotar las piezas</strong> para descubrir y trazar el camino de la ascensión.</li>
+            <li><strong>Motricidad y Error:</strong> La resistencia y tensión de los distintos eventos físicos se digitalizaron para <strong>transmitir urgencia</strong>. El usuario debe aplicar una <strong>respuesta motriz directa</strong> a través de clics veloces y prestar atención para evitar el colapso.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="escalador fade-in" id="escalador">
+
+    <div class="escalador__dibujo escalador__dibujo--interactivo" id="escalador-dibujo">
+      <img class="escalador__img escalador__img--inicio" id="escalador-inicio"
+           src="assets/caidainicio1.png" alt="Inicio escalador">
+      <img class="escalador__img escalador__img--gif" id="escalador-gif"
+           src="" alt="Caída escalador" style="display:none">
+      <img class="escalador__img escalador__img--final" id="escalador-final"
+           src="assets/caidafinal1.png" alt="Final escalador" style="display:none">
+    </div>
+
+    <div class="escalador__contenido">
+      <h2 class="escalador__titulo" id="escalador-titulo">
+        TODO ASCENSO<br>
+        DEPENDE DE UN<br>
+        PUNTO DE<br>
+        APOYO
+      </h2>
+
+      <div class="escalador__cta">
+        <button class="cta-btn" id="cta-comenzar" aria-label="Comenzar experiencia">
+          <span class="cta-btn__circulo"></span>
+          <span class="cta-btn__texto">comenzar<br>experiencia</span>
+        </button>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="divider divider--footer">
+
+  <div id="custom-cursor"></div>
+
+  <script type="module" src="script.js"></script>
+
+  <footer class="footer">
+    <div class="footer__container">
+      
+      <div class="footer__left">
+        <p class="footer__text">
+          <strong>Sobre el proyecto:</strong> Landing page e interfaz expresiva digital sobre el juego PolkUp, desarrolladas en Visual Studio Code y GitHub. Para más detalles, visite la <a href="https://wiki.ead.pucv.cl/U3_Taller_IxD_-_Mateo_Mackay" class="footer__link" target="_blank" rel="noopener noreferrer">wiki del desarrollo web</a> o explore la <a href="https://wiki.ead.pucv.cl/PolkUp" class="footer__link" target="_blank" rel="noopener noreferrer">wiki del juego de mesa</a>.
+        </p>
+        <p class="footer__credits">
+          Estudiante: Mateo Mackay Ortiz<br>
+          Profesoras: Katherine Exss y Javiera Ruiz
+        </p>
+      </div>
+
+      <div class="footer__right">
+        <a href="https://wiki.ead.pucv.cl/Taller_de_Dise%C3%B1o_de_Interacci%C3%B3n_2026" class="footer__link-title" target="_blank" rel="noopener noreferrer">Taller de Diseño de Interacción 2026</a>
+        <div class="footer__logos">
+          <img src="assets/logo universidad.png" alt="Logo PUCV" class="footer__logo">
+          <img src="assets/logo ead.png" alt="Logo ead" class="footer__logo">
+        </div>
+      </div>
+
+    </div>
+  </footer>
+</body>
+</html>
