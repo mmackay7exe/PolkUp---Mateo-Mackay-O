@@ -1705,7 +1705,17 @@ function rotar(angulo) {
 // --- LÓGICA DE LA INTERFAZ ---
 if (btnReglas && panelReglas) { btnReglas.addEventListener('click', () => panelReglas.classList.remove('hidden-fade')); }
 if (btnCerrarReglas && panelReglas) { btnCerrarReglas.addEventListener('click', () => panelReglas.classList.add('hidden-fade')); }
-if (btnVolver) { btnVolver.addEventListener('click', () => window.location.href = 'index.html'); }
+if (btnVolver) { 
+    btnVolver.addEventListener('click', () => {
+        // Regresar en el historial del navegador para no reiniciar la misma vista
+        if (document.referrer !== "") {
+            window.history.back();
+        } else {
+            // Si no hay historial, redirige a la raíz
+            window.location.href = '/'; 
+        }
+    }); 
+}
 if (btnRestart) { btnRestart.addEventListener('click', () => { window.location.reload(); }); }
 
 window.addEventListener('resize', () => {
